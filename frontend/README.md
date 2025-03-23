@@ -1,6 +1,6 @@
 # Frontend do Projeto
 
-Este é o frontend do projeto, um jogo de adedonha online desenvolvido com React.
+Este é o frontend do projeto, desenvolvido com React.
 
 ## Pré-requisitos
 
