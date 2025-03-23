@@ -1,0 +1,12 @@
+.partida-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .partida-container h1 {
+    margin-bottom: 20px;
+  }
+  
+  .partida-container h2 {
+    margin-bottom: 10px;
+  }

@@ -1,0 +1,30 @@
+.lobby-container {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .lobby-container h1 {
+    margin-bottom: 20px;
+  }
+  
+  .partidas-lista {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .partida-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    text-align: left;
+  }
+  
+  .partida-item a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .partida-item a:hover {
+    text-decoration: underline;
+  }

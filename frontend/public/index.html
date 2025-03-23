@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Jogo de Adedonha Online</title>
+  <meta name="description" content="Jogue adedonha online com amigos ou desconhecidos. Escolha temas, responda às letras sorteadas e divirta-se!">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+
+  <!-- Estilos Globais -->
+  <link rel="stylesheet" href="/styles/global.css">
+
+  <!-- Fontes do Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+  <!-- Biblioteca de Ícones (FontAwesome) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <!-- Biblioteca de Animações (opcional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+  <!-- Div raiz para o React -->
+  <div id="root"></div>
+
+  <!-- Carrega o JavaScript da aplicação -->
+  <script src="/src/index.js"></script>
+
+  <!-- Socket.IO Client -->
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+  <!-- Scripts personalizados (opcional) -->
+  <script>
+    // Exemplo de inicialização do Socket.IO
+    const socket = io('http://localhost:5000');
+
+    socket.on('connect', () => {
+      console.log('Conectado ao servidor Socket.IO');
+    });
+
+    socket.on('novaLetra', (letra) => {
+      console.log('Nova letra sorteada:', letra);
+      // Aqui você pode atualizar a interface do usuário com a nova letra
+    });
+
+    socket.on('novaMensagem', (mensagem) => {
+      console.log('Nova mensagem:', mensagem);
+      // Aqui você pode exibir a mensagem no chat
+    });
+  </script>
+</body>
+</html>

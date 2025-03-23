@@ -1,0 +1,33 @@
+.tema-selector-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .temas-lista {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .tema-item {
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .tema-item.selecionado {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .tema-selector-container button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
