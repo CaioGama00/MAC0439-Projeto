@@ -75,11 +75,12 @@ O backend estará disponível em [http://localhost:5000](http://localhost:5000).
 
 - `src/`: Código fonte do backend.
   - `config/`: Configurações do projeto (banco de dados, autenticação, etc.).
-  - `models/`: Modelos de dados para PostgreSQL, MongoDB e Neo4j.
   - `controllers/`: Lógica de controle das requisições.
+  - `models/`: Modelos de dados para PostgreSQL, MongoDB e Neo4j.
   - `routes/`: Rotas da API.
+  - `scripts/`: Scripts para inicialização e migração de bancos de dados.
   - `services/`: Serviços de negócio.
   - `utils/`: Utilitários e funções auxiliares.
 - `app.js`: Arquivo principal da aplicação.
 - `server.js`: Configuração do servidor.
-- `scripts/`: Scripts para inicialização e migração de bancos de dados.
+
