@@ -53,7 +53,7 @@ cd MAC0439-Projeto
 3. Configure o arquivo `.env` conforme instruções no `README.md` do backend.
 4. Inicie o servidor:
    ```bash
-   npm start
+   node src/server.js
    ```
 
 ### Configurando o Frontend
