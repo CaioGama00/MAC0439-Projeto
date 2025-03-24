@@ -58,4 +58,3 @@ O frontend estará disponível em [http://localhost:3000](http://localhost:3000)
   - `utils/`: Utilitários e funções auxiliares.
   - `app.js`: Componente principal do React.
   - `index.js`: Ponto de entrada do React.
-  - `utils/`: Utilitários e funções auxiliares.
