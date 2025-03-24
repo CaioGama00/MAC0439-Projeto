@@ -1,9 +1,12 @@
 // src/pages/Perfil.js
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { buscarPerfil, atualizarPerfil } from '../services/api';
+import { obterJogadorId, estaAutenticado } from '../utils/auth';
 import './perfil.css';
 
 const Perfil = () => {
+  const navigate = useNavigate();
   const [jogador, setJogador] = useState({
     username: '',
     nome: '',
@@ -11,35 +14,73 @@ const Perfil = () => {
     dataCriacao: '',
   });
   const [erro, setErro] = useState('');
+  const [sucesso, setSucesso] = useState(false);
+  const [carregando, setCarregando] = useState(false);
 
-  // Busca o perfil do jogador ao carregar a página
   useEffect(() => {
     const fetchPerfil = async () => {
+      // Verifica autenticação primeiro
+      if (!estaAutenticado()) {
+        navigate('/login');
+        return;
+      }
+
       try {
-        const perfil = await buscarPerfil(1); // Substitua 1 pelo ID do jogador logado
+        setCarregando(true);
+        
+        // Obtém o ID usando a função do auth.js
+        const jogadorId = obterJogadorId();
+        
+        if (!jogadorId) {
+          throw new Error('Usuário não autenticado');
+        }
+        
+        const perfil = await buscarPerfil(jogadorId);
         setJogador(perfil);
+        setErro('');
       } catch (error) {
-        setErro('Erro ao carregar perfil.');
+        console.error('Erro ao carregar perfil:', error);
+        setErro(error.message);
+        
+        // Se o erro for de autenticação, redireciona
+        if (error.message.includes('autenticado')) {
+          navigate('/login');
+        }
+      } finally {
+        setCarregando(false);
       }
     };
 
     fetchPerfil();
-  }, []);
+  }, [navigate]);
 
   // Função para salvar as alterações do perfil
   const handleSalvar = async () => {
     try {
-      await atualizarPerfil(jogador.id, jogador);
-      console.log('Perfil salvo:', jogador);
+      setCarregando(true);
+      console.log(obterJogadorId(), jogador);
+      await atualizarPerfil(obterJogadorId(), jogador);
+      setSucesso(true); // Define sucesso como true
+      setErro('');
+      setTimeout(() => setSucesso(false), 3000); // Remove mensagem após 3 segundos
     } catch (error) {
-      setErro('Erro ao salvar perfil.');
+      console.error('Erro ao atualizar perfil:', error);
+      setErro(error.message || 'Erro ao salvar perfil.');
+      setSucesso(false);
+    } finally {
+      setCarregando(false);
     }
   };
+
+  if (carregando && !jogador.id) {
+    return <div className="perfil-container">Carregando...</div>;
+  }
 
   return (
     <div className="perfil-container">
       <h1>Perfil</h1>
       {erro && <p className="erro">{erro}</p>}
+      {sucesso && <p className="sucesso">Perfil atualizado com sucesso!</p>}
 
       <div className="perfil-form">
         <label>
@@ -66,7 +107,12 @@ const Perfil = () => {
             onChange={(e) => setJogador({ ...jogador, email: e.target.value })}
           />
         </label>
-        <button onClick={handleSalvar}>Salvar</button>
+        {jogador.dataCriacao && (
+          <p>Membro desde: {new Date(jogador.dataCriacao).toLocaleDateString()}</p>
+        )}
+        <button onClick={handleSalvar} disabled={carregando}>
+          {carregando ? 'Salvando...' : 'Salvar'}
+        </button>
       </div>
     </div>
   );

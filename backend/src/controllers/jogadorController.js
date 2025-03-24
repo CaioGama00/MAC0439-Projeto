@@ -41,8 +41,32 @@ const buscarPerfil = async (req, res) => {
   }
 };
 
+//Atualiza perfil de um jogador
+const atualizarPerfil = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  // Validação rigorosa
+  if (!id || id === 'undefined') {
+    return res.status(400).json({ 
+      success: false,
+      message: 'ID do jogador é obrigatório'
+    });
+  }
+
+  try {
+    const jogadorAtualizado = await jogadorService.atualizarPerfil(id, req.body);
+    res.json(jogadorAtualizado);
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      message: error.message 
+    });
+  }
+};
+
 module.exports = {
   cadastrar,
   login,
   buscarPerfil,
+  atualizarPerfil
 };

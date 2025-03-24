@@ -12,4 +12,7 @@ router.post('/login', jogadorController.login);
 // Rota para buscar o perfil de um jogador
 router.get('/perfil/:id', jogadorController.buscarPerfil);
 
+// Rota para atualizar o perfil de um jogador
+router.get('/atualizar/:id', jogadorController.atualizarPerfil);
+
 module.exports = router;

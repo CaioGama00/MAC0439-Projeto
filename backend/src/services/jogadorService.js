@@ -34,7 +34,7 @@ const autenticarJogador = async (username, senha) => {
   try {
     const jogadorEncontrado = await jogador.findOne({ 
       where: { username },
-      attributes: ['id_jogador', 'username', 'email', 'senha'] // Especifica os campos
+      attributes: ['id_jogador', 'username', 'email', 'senha']
     });
     
     if (!jogadorEncontrado) {
@@ -46,7 +46,6 @@ const autenticarJogador = async (username, senha) => {
       throw new Error('Senha incorreta.');
     }
 
-    // Retorna os dados do jogador sem a senha
     const { senha: _, ...jogadorSemSenha } = jogadorEncontrado.get({ plain: true });
     return jogadorSemSenha;
   } catch (error) {
@@ -58,7 +57,7 @@ const autenticarJogador = async (username, senha) => {
 const buscarPerfil = async (idJogador) => {
   try {
     const jogadorEncontrado = await jogador.findByPk(idJogador, {
-      attributes: { exclude: ['senha'] }, // Exclui a senha do retorno
+      attributes: { exclude: ['senha'] },
     });
 
     if (!jogadorEncontrado) {
@@ -71,8 +70,74 @@ const buscarPerfil = async (idJogador) => {
   }
 };
 
+// Atualizar perfil do jogador
+const atualizarPerfil = async (idJogador, dadosAtualizacao) => {
+  try {
+    // Verifica se o jogador existe
+    const jogadorExistente = await jogador.findByPk(idJogador);
+    if (!jogadorExistente) {
+      throw new Error('Jogador não encontrado');
+    }
+
+    // Define campos permitidos para atualização
+    const camposPermitidos = ['username', 'email', 'nome', 'avatar', 'data_nascimento'];
+    const camposParaAtualizar = {};
+
+    // Filtra apenas os campos permitidos
+    for (const campo of camposPermitidos) {
+      if (dadosAtualizacao[campo] !== undefined) {
+        camposParaAtualizar[campo] = dadosAtualizacao[campo];
+      }
+    }
+
+    // Verifica se há campos para atualizar
+    if (Object.keys(camposParaAtualizar).length === 0) {
+      throw new Error('Nenhum dado válido para atualização');
+    }
+
+    // Verifica se novo username já existe (se estiver sendo alterado)
+    if (camposParaAtualizar.username && camposParaAtualizar.username !== jogadorExistente.username) {
+      const usernameExistente = await jogador.findOne({ 
+        where: { username: camposParaAtualizar.username } 
+      });
+      if (usernameExistente) {
+        throw new Error('Username já está em uso');
+      }
+    }
+
+    // Verifica se novo email já existe (se estiver sendo alterado)
+    if (camposParaAtualizar.email && camposParaAtualizar.email !== jogadorExistente.email) {
+      const emailExistente = await jogador.findOne({ 
+        where: { email: camposParaAtualizar.email } 
+      });
+      if (emailExistente) {
+        throw new Error('Email já está em uso');
+      }
+    }
+
+    // Executa a atualização
+    await jogador.update(camposParaAtualizar, {
+      where: { id_jogador: idJogador }
+    });
+
+    // Retorna os dados atualizados (excluindo a senha)
+    const jogadorAtualizado = await jogador.findByPk(idJogador, {
+      attributes: { exclude: ['senha'] }
+    });
+
+    return jogadorAtualizado;
+  } catch (error) {
+    console.error('Erro ao atualizar perfil:', {
+      idJogador,
+      error: error.message
+    });
+    throw new Error(`Erro ao atualizar perfil: ${error.message}`);
+  }
+};
+
 module.exports = {
   cadastrarJogador,
   autenticarJogador,
   buscarPerfil,
+  atualizarPerfil // Exporta a nova função
 };

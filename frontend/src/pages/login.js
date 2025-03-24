@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { salvarDadosAutenticacao } from '../utils/auth';
 import { useNavigate, Link } from 'react-router-dom';
-import { salvarToken } from '../utils/auth';
 import { login } from '../services/api';
 import './login.css';
 
@@ -15,10 +15,12 @@ const Login = () => {
     if (username && senha) {
       try {
         const response = await login(username, senha);
-        salvarToken(response.token); // Salva o token no localStorage
+        
+        // Salva ambos token e ID
+        salvarDadosAutenticacao(response.token, response.id_jogador);
         navigate('/lobby');
       } catch (error) {
-        setErro('Erro ao fazer login. Verifique suas credenciais.');
+        setErro(error.message || 'Erro ao fazer login. Verifique suas credenciais.');
       }
     } else {
       setErro('Por favor, preencha todos os campos.');

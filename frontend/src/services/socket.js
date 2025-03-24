@@ -2,7 +2,7 @@
 import { io } from 'socket.io-client';
 
 // Configura a URL do servidor Socket.IO (substitua pela URL do seu backend)
-const SOCKET_SERVER_URL = 'http://localhost:5000';
+const SOCKET_SERVER_URL = 'http://localhost:8000';
 
 // Cria uma instância do Socket.IO
 const socket = io(SOCKET_SERVER_URL);

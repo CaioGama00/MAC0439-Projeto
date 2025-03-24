@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const io = configureSocket(server);
 
 // Definição da porta
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 // Inicialização do servidor
 server.listen(PORT, () => {
