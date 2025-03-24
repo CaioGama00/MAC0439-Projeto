@@ -17,7 +17,6 @@ O projeto está dividido em duas pastas principais:
 MAC0439-Projeto/
 │-- frontend/   # Interface do usuário (React)
 │-- backend/    # Lógica do servidor e APIs (Node.js, Express)
-└── README.md   # Este arquivo
 ```
 
 Cada uma dessas pastas contém seu próprio `README.md` com detalhes específicos sobre a instalação e configuração.
