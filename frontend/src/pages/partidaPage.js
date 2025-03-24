@@ -14,14 +14,17 @@ const PartidaPage = () => {
     entrarPartida(partidaId);
 
     // Escuta novas letras sorteadas
-    onNovaLetra((novaLetra) => {
+    const handleNovaLetra = (novaLetra) => {
       setLetra(novaLetra);
-    });
+    };
 
     // Escuta novas mensagens no chat
-    onNovaMensagem((mensagem) => {
+    const handleNovaMensagem = (mensagem) => {
       setMensagens((prev) => [...prev, mensagem]);
-    });
+    };
+
+    onNovaLetra(handleNovaLetra);
+    onNovaMensagem(handleNovaMensagem);
 
     // Limpa os listeners ao desmontar o componente
     return () => {

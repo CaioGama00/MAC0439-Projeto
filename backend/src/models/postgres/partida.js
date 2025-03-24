@@ -1,6 +1,5 @@
-// src/models/postgres/partida.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db').sequelize; // Importa a instância do Sequelize
+const sequelize = require('../../config/db').sequelize;
 
 const Partida = sequelize.define('Partida', {
   id_partida: {
@@ -32,6 +31,9 @@ const Partida = sequelize.define('Partida', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
+}, {
+  tableName: 'Partida', // Nome da tabela no banco de dados
+  timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 
 module.exports = Partida;

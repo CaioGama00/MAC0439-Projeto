@@ -4,11 +4,13 @@ const jogadorService = require('../services/jogadorService');
 // Cadastrar um novo jogador
 const cadastrar = async (req, res) => {
   const { username, email, senha } = req.body;
-
+  console.log("Dados recebidos:", { username, email, senha }); // Log dos dados recebidos
   try {
     const novoJogador = await jogadorService.cadastrarJogador(username, email, senha);
+    console.log("Jogador cadastrado com sucesso!"); // Log do sucesso
     res.status(201).json(novoJogador);
   } catch (error) {
+    console.error("Erro ao cadastrar jogador:", error); // Log do erro
     res.status(500).json({ message: error.message });
   }
 };
@@ -19,8 +21,10 @@ const login = async (req, res) => {
 
   try {
     const jogadorAutenticado = await jogadorService.autenticarJogador(username, senha);
+    console.log("Login feito com sucesso!"); // Log do sucesso
     res.status(200).json(jogadorAutenticado);
   } catch (error) {
+    console.error("Erro ao realizar login:", error);
     res.status(500).json({ message: error.message });
   }
 };

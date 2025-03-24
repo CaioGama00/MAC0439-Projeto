@@ -1,4 +1,3 @@
-// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client'; // React 18 usa createRoot
 import App from './app';

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Chat from './chat';
 import Resposta from './resposta';
+import { enviarResposta } from '../services/api';
+import { onNovaLetra } from '../services/socket';
 import './partida.css';
 
 const Partida = ({ partidaId }) => {
@@ -8,21 +10,27 @@ const Partida = ({ partidaId }) => {
   const [respostas, setRespostas] = useState([]);
   const [mensagens, setMensagens] = useState([]);
 
+  // Escuta novas letras sorteadas
   useEffect(() => {
-    // Simula o sorteio de uma letra (substitua por uma chamada ao backend)
-    setLetra('A');
+    const handleNovaLetra = (novaLetra) => {
+      setLetra(novaLetra);
+    };
 
-    // Simula o carregamento de mensagens iniciais (substitua por uma chamada ao backend)
-    setMensagens([
-      { id: 1, texto: 'Bem-vindo à partida!', remetente: 'Sistema' },
-    ]);
+    onNovaLetra(handleNovaLetra);
+
+    return () => {
+      onNovaLetra(null); // Remove o listener ao desmontar o componente
+    };
   }, []);
 
-  const handleEnviarResposta = (resposta) => {
-    setRespostas([...respostas, resposta]);
-
-    // Simula o envio de uma mensagem no chat
-    setMensagens([...mensagens, { id: mensagens.length + 1, texto: resposta, remetente: 'Você' }]);
+  const handleEnviarResposta = async (resposta) => {
+    try {
+      await enviarResposta(partidaId, 1, 1, resposta); // Substitua pelos IDs corretos
+      setRespostas([...respostas, resposta]);
+      setMensagens([...mensagens, { id: mensagens.length + 1, texto: resposta, remetente: 'Você' }]);
+    } catch (error) {
+      console.error('Erro ao enviar resposta:', error);
+    }
   };
 
   return (
@@ -30,7 +38,7 @@ const Partida = ({ partidaId }) => {
       <h1>Partida {partidaId}</h1>
       <h2>Letra: {letra}</h2>
       <Resposta letra={letra} onEnviarResposta={handleEnviarResposta} />
-      <Chat mensagens={mensagens} />
+      <Chat partidaId={partidaId} mensagens={mensagens} />
     </div>
   );
 };

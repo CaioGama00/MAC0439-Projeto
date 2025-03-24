@@ -1,6 +1,5 @@
-// src/models/postgres/resposta.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db').sequelize; // Importa a instância do Sequelize
+const sequelize = require('../../config/db').sequelize;
 
 const Resposta = sequelize.define('Resposta', {
   id_partida: {
@@ -14,10 +13,6 @@ const Resposta = sequelize.define('Resposta', {
   numero_rodada: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    references: {
-      model: 'Rodada', // Referência à tabela Rodada
-      key: 'numero_rodada',
-    },
   },
   id_tema: {
     type: DataTypes.INTEGER,
@@ -39,10 +34,13 @@ const Resposta = sequelize.define('Resposta', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  válida: {
+  valida: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
+}, {
+  tableName: 'Resposta', // Nome da tabela no banco de dados
+  timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 
 module.exports = Resposta;

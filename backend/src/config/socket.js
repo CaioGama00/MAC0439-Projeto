@@ -10,9 +10,14 @@ const configureSocket = (server) => {
     },
   });
 
+  // Contador de jogadores conectados
+  let jogadoresConectados = 0;
+
   // Evento de conexão de um novo jogador
   io.on('connection', (socket) => {
     console.log('Novo jogador conectado:', socket.id);
+    jogadoresConectados++; // Incrementa o contador de jogadores conectados
+    console.log(`Jogadores conectados: ${jogadoresConectados}`);
 
     // Evento para entrar em uma partida
     socket.on('entrarPartida', (partidaId) => {
@@ -28,6 +33,8 @@ const configureSocket = (server) => {
     // Evento de desconexão
     socket.on('disconnect', () => {
       console.log('Jogador desconectado:', socket.id);
+      jogadoresConectados--; // Decrementa o contador de jogadores conectados
+      console.log(`Jogadores conectados: ${jogadoresConectados}`);
     });
   });
 

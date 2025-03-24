@@ -1,6 +1,5 @@
-// src/pages/Login.js
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Importe o Link
+import { useNavigate, Link } from 'react-router-dom';
 import { salvarToken } from '../utils/auth';
 import { login } from '../services/api';
 import './login.css';
@@ -9,6 +8,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false); // Estado para controlar a visibilidade da senha
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -35,15 +35,26 @@ const Login = () => {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
-      <input
-        type="password"
-        placeholder="Senha"
-        value={senha}
-        onChange={(e) => setSenha(e.target.value)}
-      />
+      <div className="senha-container">
+        <input
+          type={mostrarSenha ? "text" : "password"} // Alterna entre "text" e "password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+        />
+        <div className="mostrar-senha-checkbox">
+          <input
+            type="checkbox"
+            id="mostrarSenha"
+            checked={mostrarSenha}
+            onChange={() => setMostrarSenha(!mostrarSenha)}
+          />
+          <label htmlFor="mostrarSenha">Mostrar senha</label>
+        </div>
+      </div>
       <button onClick={handleLogin}>Entrar</button>
       <p>
-        Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link> {/* Use o Link aqui */}
+        Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
       </p>
     </div>
   );

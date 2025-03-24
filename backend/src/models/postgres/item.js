@@ -1,6 +1,5 @@
-// src/models/postgres/item.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db').sequelize; // Importa a instância do Sequelize
+const sequelize = require('../../config/db').sequelize;
 
 const Item = sequelize.define('Item', {
   id_item: {
@@ -16,7 +15,7 @@ const Item = sequelize.define('Item', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  preço: {
+  preco: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -24,6 +23,9 @@ const Item = sequelize.define('Item', {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+}, {
+  tableName: 'Item', // Nome da tabela no banco de dados
+  timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 
 module.exports = Item;

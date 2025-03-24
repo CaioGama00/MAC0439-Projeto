@@ -1,7 +1,8 @@
+// src/models/postgres/tema_partida.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/db').sequelize;
 
-const Rodada = sequelize.define('Rodada', {
+const TemaPartida = sequelize.define('TemaPartida', {
   id_partida: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -10,25 +11,17 @@ const Rodada = sequelize.define('Rodada', {
       key: 'id_partida',
     },
   },
-  numero_rodada: {
+  id_tema: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-  },
-  stop_jogador: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
     references: {
-      model: 'Jogador', // Referência à tabela Jogador
-      key: 'id_jogador',
+      model: 'Tema', // Referência à tabela Tema
+      key: 'id_tema',
     },
   },
-  letra_sorteada: {
-    type: DataTypes.STRING(1),
-    allowNull: false,
-  },
 }, {
-  tableName: 'Rodada', // Nome da tabela no banco de dados
+  tableName: 'Tema_Partida', // Nome da tabela no banco de dados
   timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 
-module.exports = Rodada;
+module.exports = TemaPartida;

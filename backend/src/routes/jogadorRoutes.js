@@ -4,7 +4,7 @@ const router = express.Router();
 const jogadorController = require('../controllers/jogadorController');
 
 // Rota para cadastrar um novo jogador
-router.post('/cadastrar', jogadorController.cadastrar);
+router.post('/cadastro', jogadorController.cadastrar);
 
 // Rota para fazer login
 router.post('/login', jogadorController.login);

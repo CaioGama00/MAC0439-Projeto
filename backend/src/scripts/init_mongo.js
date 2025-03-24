@@ -1,13 +1,17 @@
 // scripts/init_mongo.js
 const mongoose = require('mongoose');
-const Perfil = require('../src/models/mongo/perfil');
-const Mensagem = require('../src/models/mongo/mensagem');
+const Perfil = require('../models/mongo/perfil');
+const Mensagem = require('../models/mongo/mensagem');
 
 // Conectar ao MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const connectToMongo = async () => {
+  try {
+    await mongoose.connect(`${process.env.MONGO_URI}/${process.env.MONGO_DB}`);
+    console.log('Conectado ao MongoDB Atlas');
+  } catch (error) {
+    console.error('Erro ao conectar ao MongoDB Atlas:', error);
+  }
+};
 
 // Função para inicializar o MongoDB
 const initMongo = async () => {

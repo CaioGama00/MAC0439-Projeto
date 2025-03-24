@@ -1,6 +1,5 @@
-// src/models/postgres/inventario.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db').sequelize; // Importa a instância do Sequelize
+const sequelize = require('../../config/db').sequelize;
 
 const Inventario = sequelize.define('Inventario', {
   id_jogador: {
@@ -23,6 +22,9 @@ const Inventario = sequelize.define('Inventario', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
+}, {
+  tableName: 'Inventario', // Nome da tabela no banco de dados
+  timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 
 module.exports = Inventario;

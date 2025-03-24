@@ -2,12 +2,12 @@
 import axios from 'axios';
 
 // Configura a base URL da API (substitua pela URL do seu backend)
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 // Função para cadastrar um novo usuário
 export const cadastrar = async (username, senha, email) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/cadastro`, {
+    const response = await axios.post(`${API_BASE_URL}/jogador/cadastro`, {
       username,
       senha,
       email,
@@ -22,7 +22,7 @@ export const cadastrar = async (username, senha, email) => {
 // Função para fazer login
 export const login = async (username, senha) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/login`, { username, senha });
+    const response = await axios.post(`${API_BASE_URL}/jogador/login`, { username, senha });
     return response.data;
   } catch (error) {
     console.error('Erro ao fazer login:', error);

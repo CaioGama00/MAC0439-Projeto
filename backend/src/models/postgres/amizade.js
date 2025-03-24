@@ -1,6 +1,5 @@
-// src/models/postgres/amizade.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db').sequelize; // Importa a instância do Sequelize
+const sequelize = require('../../config/db').sequelize;
 
 const Amizade = sequelize.define('Amizade', {
   id_jogador1: {
@@ -23,10 +22,13 @@ const Amizade = sequelize.define('Amizade', {
     type: DataTypes.STRING,
     defaultValue: 'pendente',
   },
-  é_favorito: {
+  e_favorito: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+}, {
+  tableName: 'Amizade', // Nome da tabela no banco de dados
+  timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 
 module.exports = Amizade;

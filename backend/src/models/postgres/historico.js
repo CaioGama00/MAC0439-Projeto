@@ -1,6 +1,5 @@
-// src/models/postgres/historico.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db').sequelize; // Importa a instância do Sequelize
+const sequelize = require('../../config/db').sequelize;
 
 const Historico = sequelize.define('Historico', {
   id_partida: {
@@ -27,6 +26,9 @@ const Historico = sequelize.define('Historico', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
+}, {
+  tableName: 'Historico', // Nome da tabela no banco de dados
+  timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 
 module.exports = Historico;

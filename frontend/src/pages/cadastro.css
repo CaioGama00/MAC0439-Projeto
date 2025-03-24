@@ -1,34 +1,96 @@
-/* src/pages/Cadastro.css */
+/* Estilos gerais para o container do formulário */
 .cadastro-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .cadastro-container h1 {
-    margin-bottom: 20px;
-  }
-  
-  .cadastro-container input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .cadastro-container button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .cadastro-container .erro {
-    color: red;
-    margin-bottom: 10px;
-  }
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Estilos para os inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #4e90b3;
+  outline: none;
+}
+
+/* Estilos para o erro */
+.erro {
+  color: red;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+/* Estilos para o container da senha */
+.senha-container {
+  position: relative;
+}
+
+/* Estilos para o checkbox e label da senha */
+.mostrar-senha-checkbox {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.mostrar-senha-checkbox input {
+  margin-right: 5px;
+}
+
+/* Estilos para o botão */
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  background-color: #4e90b3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #38729d;
+}
+
+/* Estilos para o link de login */
+p {
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+p a {
+  color: #4e90b3;
+  text-decoration: none;
+}
+
+p a:hover {
+  text-decoration: underline;
+}

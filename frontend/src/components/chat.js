@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { enviarMensagem, onNovaMensagem } from '../services/socket';
 import './chat.css';
 
-const Chat = ({ mensagens }) => {
+const Chat = ({ partidaId, mensagens }) => {
   const [novaMensagem, setNovaMensagem] = useState('');
 
-  // Simula o carregamento de mensagens iniciais
+  // Escuta novas mensagens
   useEffect(() => {
-    console.log('Chat carregado. Conectando ao Socket.IO...');
-    // Aqui você pode adicionar a lógica para se conectar ao Socket.IO
+    const handleNovaMensagem = (mensagem) => {
+      console.log('Nova mensagem recebida:', mensagem);
+    };
+
+    onNovaMensagem(handleNovaMensagem);
+
+    return () => {
+      onNovaMensagem(null); // Remove o listener ao desmontar o componente
+    };
   }, []);
 
   const handleEnviarMensagem = () => {
     if (novaMensagem.trim()) {
-      // Aqui você pode enviar a mensagem para o backend via Socket.IO
-      console.log('Mensagem enviada:', novaMensagem);
+      enviarMensagem(partidaId, novaMensagem); // Envia a mensagem via Socket.IO
       setNovaMensagem('');
     }
   };

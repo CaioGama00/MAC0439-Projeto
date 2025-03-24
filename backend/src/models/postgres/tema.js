@@ -1,6 +1,5 @@
-// src/models/postgres/tema.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db').sequelize; // Importa a instância do Sequelize
+const sequelize = require('../../config/db').sequelize;
 
 const Tema = sequelize.define('Tema', {
   id_tema: {
@@ -16,6 +15,9 @@ const Tema = sequelize.define('Tema', {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+}, {
+  tableName: 'Tema', // Nome da tabela no banco de dados
+  timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 
 module.exports = Tema;
