@@ -50,14 +50,12 @@ O frontend estará disponível em [http://localhost:3000](http://localhost:3000)
 
 ## Estrutura do Projeto
 
-```
-public/        # Arquivos estáticos (HTML, imagens, etc.)
-src/           # Código fonte do frontend
-│-- components/ # Componentes reutilizáveis
-│-- pages/      # Páginas do jogo
-│-- services/   # Serviços para comunicação com o backend
-│-- utils/      # Utilitários e funções auxiliares
-│-- App.js      # Componente principal do React
-└── index.js    # Ponto de entrada do React
-```
-
+- `public/`: Arquivos estáticos (HTML, imagens, etc.)
+- `src/`: Código fonte do frontend.
+  - `components/`: Componentes reutilizáveis.
+  - `pages/`: Páginas do jogo.
+  - `services/`: Serviços para comunicação com o backend.
+  - `utils/`: Utilitários e funções auxiliares.
+  - `app.js`: Componente principal do React.
+  - `index.js`: Ponto de entrada do React.
+  - `utils/`: Utilitários e funções auxiliares.
