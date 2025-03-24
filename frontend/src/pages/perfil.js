@@ -21,7 +21,7 @@ const Perfil = () => {
     const fetchPerfil = async () => {
       // Verifica autenticação primeiro
       if (!estaAutenticado()) {
-        navigate('/login');
+        navigate('/');
         return;
       }
 
@@ -44,7 +44,7 @@ const Perfil = () => {
         
         // Se o erro for de autenticação, redireciona
         if (error.message.includes('autenticado')) {
-          navigate('/login');
+          navigate('/');
         }
       } finally {
         setCarregando(false);
@@ -58,7 +58,6 @@ const Perfil = () => {
   const handleSalvar = async () => {
     try {
       setCarregando(true);
-      console.log(obterJogadorId(), jogador);
       await atualizarPerfil(obterJogadorId(), jogador);
       setSucesso(true); // Define sucesso como true
       setErro('');

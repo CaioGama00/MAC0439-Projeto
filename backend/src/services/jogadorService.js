@@ -139,5 +139,5 @@ module.exports = {
   cadastrarJogador,
   autenticarJogador,
   buscarPerfil,
-  atualizarPerfil // Exporta a nova função
+  atualizarPerfil 
 };

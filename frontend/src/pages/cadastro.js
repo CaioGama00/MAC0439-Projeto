@@ -50,11 +50,6 @@ const Cadastro = () => {
         formData.email
       );
 
-      // Verifica se a resposta contém os dados esperados
-      if (!response.token || !response.id_jogador) {
-        throw new Error('Dados de registro incompletos');
-      }
-
       // Salva os dados de autenticação
       salvarDadosAutenticacao(response.token, response.id_jogador);
       
@@ -152,7 +147,7 @@ const Cadastro = () => {
       </form>
       
       <p className="login-link">
-        Já tem uma conta? <Link to="/login">Faça login</Link>
+        Já tem uma conta? <Link to="/">Faça login</Link>
       </p>
     </div>
   );

@@ -5,25 +5,54 @@ import { login } from '../services/api';
 import './login.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [senha, setSenha] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    senha: ''
+  });
   const [erro, setErro] = useState('');
-  const [mostrarSenha, setMostrarSenha] = useState(false); // Estado para controlar a visibilidade da senha
+  const [carregando, setCarregando] = useState(false);
+  const [mostrarSenha, setMostrarSenha] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    if (username && senha) {
-      try {
-        const response = await login(username, senha);
-        
-        // Salva ambos token e ID
-        salvarDadosAutenticacao(response.token, response.id_jogador);
-        navigate('/lobby');
-      } catch (error) {
-        setErro(error.message || 'Erro ao fazer login. Verifique suas credenciais.');
-      }
-    } else {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErro('');
+    
+    if (!formData.username || !formData.senha) {
       setErro('Por favor, preencha todos os campos.');
+      return;
+    }
+
+    try {
+      setCarregando(true);
+      const response = await login(formData.username, formData.senha);
+      
+      // Salva ambos token e ID
+      salvarDadosAutenticacao(response.token, response.id_jogador);
+      navigate('/lobby');
+    } catch (error) {
+      console.error('Erro no login:', error);
+      
+      // Tratamento de erros específicos
+      if (error.response) {
+        if (error.response.status === 401) {
+          setErro('Credenciais inválidas');
+        } else {
+          setErro(error.response.data?.message || 'Erro ao fazer login');
+        }
+      } else {
+        setErro(error.message || 'Erro ao conectar com o servidor');
+      }
+    } finally {
+      setCarregando(false);
     }
   };
 
@@ -31,20 +60,35 @@ const Login = () => {
     <div className="login-container">
       <h1>Login</h1>
       {erro && <p className="erro">{erro}</p>}
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <div className="senha-container">
-        <input
-          type={mostrarSenha ? "text" : "password"} // Alterna entre "text" e "password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-        />
-        <div className="mostrar-senha-checkbox">
+      
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+            placeholder="Digite seu username"
+          />
+        </div>
+        
+        <div className="form-group">
+          <label htmlFor="senha">Senha</label>
+          <input
+            type={mostrarSenha ? "text" : "password"}
+            id="senha"
+            name="senha"
+            value={formData.senha}
+            onChange={handleChange}
+            required
+            placeholder="Digite sua senha"
+          />
+        </div>
+        
+        <div className="form-group checkbox-group">
           <input
             type="checkbox"
             id="mostrarSenha"
@@ -53,9 +97,13 @@ const Login = () => {
           />
           <label htmlFor="mostrarSenha">Mostrar senha</label>
         </div>
-      </div>
-      <button onClick={handleLogin}>Entrar</button>
-      <p>
+        
+        <button type="submit" disabled={carregando}>
+          {carregando ? 'Entrando...' : 'Entrar'}
+        </button>
+      </form>
+      
+      <p className="cadastro-link">
         Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
       </p>
     </div>
