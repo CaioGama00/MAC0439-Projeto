@@ -21,7 +21,7 @@ const login = async (req, res) => {
 
   try {
     const jogadorAutenticado = await jogadorService.autenticarJogador(username, senha);
-    console.log("Login feito com sucesso!"); // Log do sucesso
+    console.log("Login feito com sucesso!");
     res.status(200).json(jogadorAutenticado);
   } catch (error) {
     console.error("Erro ao realizar login:", error);

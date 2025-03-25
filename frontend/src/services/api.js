@@ -40,10 +40,10 @@ export const login = async (username, senha) => {
 // Função para criar uma nova partida
 export const criarPartida = async (idHost, temas) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/partidas`, { idHost, temas });
+    const response = await axios.post('/partida/criar', { idHost, temas });
     return response.data;
   } catch (error) {
-    console.error('Erro ao criar partida:', error);
+    console.error('Erro ao criar partida:', error.response?.data || error.message);
     throw error;
   }
 };
@@ -51,10 +51,10 @@ export const criarPartida = async (idHost, temas) => {
 // Função para buscar partidas ativas
 export const buscarPartidasAtivas = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/partidas/ativas`);
+    const response = await axios.get('/partida/ativas');
     return response.data;
   } catch (error) {
-    console.error('Erro ao buscar partidas ativas:', error);
+    console.error('Erro ao buscar partidas ativas:', error.response?.data || error.message);
     throw error;
   }
 };
@@ -62,15 +62,14 @@ export const buscarPartidasAtivas = async () => {
 // Função para enviar uma resposta
 export const enviarResposta = async (partidaId, rodadaId, idJogador, idTema, resposta) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/partidas/${partidaId}/respostas`, {
-      rodadaId,
-      idJogador,
+    const response = await axios.post(`/partida/${partidaId}/rodada/${rodadaId}/enviar-resposta`, {
       idTema,
       resposta,
+      idJogador
     });
     return response.data;
   } catch (error) {
-    console.error('Erro ao enviar resposta:', error);
+    console.error('Erro ao enviar resposta:', error.response?.data || error.message);
     throw error;
   }
 };

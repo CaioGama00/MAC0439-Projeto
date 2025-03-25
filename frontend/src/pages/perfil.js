@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { buscarPerfil, atualizarPerfil } from '../services/api';
-import { obterJogadorId, estaAutenticado } from '../utils/auth';
+import { obterJogadorId, estaAutenticado, removerDadosAutenticacao } from '../utils/auth';
 import './perfil.css';
 
 const Perfil = () => {
@@ -16,23 +16,23 @@ const Perfil = () => {
   const [erro, setErro] = useState('');
   const [sucesso, setSucesso] = useState(false);
   const [carregando, setCarregando] = useState(false);
+  const [naoAutenticado, setNaoAutenticado] = useState(false);
 
   useEffect(() => {
-    const fetchPerfil = async () => {
-      // Verifica autenticação primeiro
-      if (!estaAutenticado()) {
-        navigate('/');
-        return;
-      }
+    // Verifica autenticação antes de fazer qualquer coisa
+    if (!estaAutenticado()) {
+      removerDadosAutenticacao();
+      setNaoAutenticado(true);
+      return;
+    }
 
+    const fetchPerfil = async () => {
       try {
         setCarregando(true);
-        
-        // Obtém o ID usando a função do auth.js
         const jogadorId = obterJogadorId();
         
         if (!jogadorId) {
-          throw new Error('Usuário não autenticado');
+          throw new Error('ID do jogador não disponível');
         }
         
         const perfil = await buscarPerfil(jogadorId);
@@ -42,9 +42,9 @@ const Perfil = () => {
         console.error('Erro ao carregar perfil:', error);
         setErro(error.message);
         
-        // Se o erro for de autenticação, redireciona
-        if (error.message.includes('autenticado')) {
-          navigate('/');
+        if (error.response?.status === 401) {
+          removerDadosAutenticacao();
+          setNaoAutenticado(true);
         }
       } finally {
         setCarregando(false);
@@ -54,22 +54,36 @@ const Perfil = () => {
     fetchPerfil();
   }, [navigate]);
 
-  // Função para salvar as alterações do perfil
   const handleSalvar = async () => {
     try {
       setCarregando(true);
       await atualizarPerfil(obterJogadorId(), jogador);
-      setSucesso(true); // Define sucesso como true
+      setSucesso(true);
       setErro('');
-      setTimeout(() => setSucesso(false), 3000); // Remove mensagem após 3 segundos
+      setTimeout(() => setSucesso(false), 3000);
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
       setErro(error.message || 'Erro ao salvar perfil.');
-      setSucesso(false);
+      
+      if (error.response?.status === 401) {
+        removerDadosAutenticacao();
+        setNaoAutenticado(true);
+      }
     } finally {
       setCarregando(false);
     }
   };
+
+  if (naoAutenticado) {
+    return (
+      <div className="perfil-container">
+        <div className="aviso-nao-autenticado">
+          <p>Você precisa estar logado para acessar esta página</p>
+          <button onClick={() => navigate('/')}>Ir para a página de login</button>
+        </div>
+      </div>
+    );
+  }
 
   if (carregando && !jogador.id) {
     return <div className="perfil-container">Carregando...</div>;

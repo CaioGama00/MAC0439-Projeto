@@ -6,6 +6,9 @@ const partidaController = require('../controllers/partidaController');
 // Rota para criar uma nova partida
 router.post('/criar', partidaController.criarPartida);
 
+// Rota para buscar partidas ativas
+router.get('/ativas', partidaController.buscarPartidasAtivas);
+
 // Rota para iniciar uma nova rodada
 router.post('/:partidaId/iniciar-rodada', partidaController.iniciarRodada);
 

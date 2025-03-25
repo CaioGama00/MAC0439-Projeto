@@ -24,7 +24,7 @@ export const removerDadosAutenticacao = () => {
 
 // Função para verificar autenticação
 export const estaAutenticado = () => {
-  return !!obterToken() && !!obterJogadorId();
+  return obterToken();
 };
 
 // Função para decodificar o token JWT

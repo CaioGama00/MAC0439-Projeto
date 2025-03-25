@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { criarPartida, buscarPartidasAtivas } from '../services/api';
+import { obterJogadorId } from '../utils/auth';
 import TemaSelector from '../components/temaSelector';
 import './lobby.css';
 
@@ -27,7 +28,7 @@ const Lobby = () => {
   // Função para criar uma nova partida
   const handleCriarPartida = async (temas) => {
     try {
-      const novaPartida = await criarPartida(1, temas); // Substitua 1 pelo ID do jogador logado
+      const novaPartida = await criarPartida(obterJogadorId(), temas);
       setPartidas([...partidas, novaPartida]);
       setMostrarTemaSelector(false);
     } catch (error) {
