@@ -26,30 +26,37 @@ const connectToPostgres = async () => {
 // Configuração do MongoDB
 const connectToMongo = async () => {
   try {
-    await mongoose.connect(`${process.env.MONGO_URI}/${process.env.MONGO_DB}`);
-    console.log('Conectado ao MongoDB Atlas');
+    await mongoose.connect(process.env.MONGO_URI, {
+      dbName: 'adedonha',
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('Conectado ao MongoDB com sucesso');
   } catch (error) {
-    console.error('Erro ao conectar ao MongoDB Atlas:', error);
+    console.error('Erro ao conectar ao MongoDB:', error.message);
+    process.exit(1); // Encerra o processo se falhar
   }
 };
 
-// // Configuração do Neo4j
-// const neo4jDriver = neo4j.driver(
-//   process.env.NEO4J_URI, // URL de conexão do Neo4j
-//   neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD) // Autenticação do Neo4j
-// );
+const uri = process.env.NEO4J_URI;
+const user = process.env.NEO4J_USER;
+const password = process.env.NEO4J_PASSWORD;
+let driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
 
-// const connectToNeo4j = async () => {
-//   try {
-//     await neo4jDriver.verifyConnectivity();
-//     console.log('Conectado ao Neo4j');
-//   } catch (error) {
-//     console.error('Erro ao conectar ao Neo4j:', error);
-//   }
-// };
+const connectToNeo4j = async () => {
+  try {
+    const serverInfo = await driver.getServerInfo()
+    console.log('Connection established')
+    console.log(serverInfo)
+  } catch(err) {
+    console.log(`Connection error\n${err}\nCause: ${err.cause}`)
+  }
+};
 
 module.exports = {
   sequelize, // Exporta a instância do Sequelize
   connectToPostgres,
   connectToMongo,
+  connectToNeo4j,
+  driver
 };

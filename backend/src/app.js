@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { connectToPostgres, connectToMongo, sequelize } = require('./config/db'); // Importa sequelize
+const { connectToPostgres, connectToMongo, connectToNeo4j, sequelize } = require('./config/db'); // Importa sequelize
 const errorHandler = require('./utils/errorHandler');
 
 // Importação das rotas
@@ -13,6 +13,7 @@ const temaRoutes = require('./routes/temaRoutes');
 const amizadeRoutes = require('./routes/amizadeRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const itemRoutes = require('./routes/itemRoutes');
+const estatisticaRoutes = require('./routes/estatisticaRoutes')
 
 // Inicialização do Express
 const app = express();
@@ -29,6 +30,7 @@ const startServer = async () => {
   try {
     await connectToPostgres(); // Aguarda a conexão com o PostgreSQL
     await connectToMongo(); // Aguarda a conexão com o MongoDB
+    await connectToNeo4j(); // Aguarda a conexão com o Neo4j
 
     // // Sincroniza o modelo com o banco de dados (apenas em desenvolvimento)
     // await sequelize.sync({ force: true }); // force: true recria as tabelas
@@ -41,6 +43,7 @@ const startServer = async () => {
     app.use('/api/amizade', amizadeRoutes);
     app.use('/api/chat', chatRoutes);
     app.use('/api/item', itemRoutes);
+    app.use('/api/estatisticas', estatisticaRoutes);
 
     // Rota de health check
     app.get('/health', (req, res) => {
