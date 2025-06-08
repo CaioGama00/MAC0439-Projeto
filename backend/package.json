@@ -15,8 +15,9 @@
     "dotenv": "^16.4.7",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.17.0",
     "mongoose": "^8.0.3",
-    "neo4j-driver": "^5.12.0",
+    "neo4j-driver": "^5.28.1",
     "pg": "^8.14.1",
     "sequelize": "^6.37.6",
     "socket.io": "^4.7.2"
