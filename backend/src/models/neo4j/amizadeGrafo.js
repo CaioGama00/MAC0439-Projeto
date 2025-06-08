@@ -72,4 +72,28 @@ const sugerirAmizades = async (idJogador) => {
   }
 };
 
-module.exports = { adicionarAmizade, verificarAmizade, sugerirAmizades };
+// Listar todas as amizades entre jogadores
+const listarAmizades = async () => {
+  const session = driver.session();
+
+  try {
+    const result = await session.run(
+      `
+      MATCH (j:Jogador)-[:AMIGO_DE]->(amigo:Jogador)
+      RETURN j, amigo
+      `
+    );
+
+    return result.records.map(record => ({
+      jogador1: record.get('j').properties,
+      jogador2: record.get('amigo').properties,
+    }));
+  } catch (error) {
+    console.error('Erro ao listar amizades em grafo:', error);
+    throw error;
+  } finally {
+    await session.close();
+  }
+};
+
+module.exports = { adicionarAmizade, verificarAmizade, sugerirAmizades, listarAmizades };

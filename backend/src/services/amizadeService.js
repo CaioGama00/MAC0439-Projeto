@@ -1,6 +1,7 @@
 // src/services/amizadeService.js
 const amizade = require('../models/postgres/amizade');
 const jogador = require('../models/postgres/jogador');
+const amizadeGrafo = require('../models/neo4j/amizadeGrafo');
 
 // Adicionar uma amizade
 const adicionarAmizade = async (idJogador1, idJogador2) => {
@@ -44,7 +45,13 @@ const aceitarAmizade = async (idAmizade) => {
   }
 };
 
+// Listar todas as amizades
+const listarAmizades = async () => {
+  return await amizadeGrafo.listarAmizades();
+};
+
 module.exports = {
   adicionarAmizade,
   aceitarAmizade,
+  listarAmizades
 };

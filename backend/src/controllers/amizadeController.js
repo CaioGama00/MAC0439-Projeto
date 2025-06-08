@@ -25,7 +25,17 @@ const aceitarAmizade = async (req, res) => {
   }
 };
 
+const listarAmizades = async (req, res) => {
+  const amizades = await amizadeService.listarAmizades();
+  try {
+    res.status(200).json(amizades);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao listar amizades.' });
+  }
+};
+
 module.exports = {
   adicionarAmizade,
   aceitarAmizade,
+  listarAmizades
 };

@@ -9,4 +9,7 @@ router.post('/adicionar', amizadeController.adicionarAmizade);
 // Rota para aceitar uma amizade
 router.put('/aceitar/:id', amizadeController.aceitarAmizade);
 
+// Rota para listar amizades
+router.get('/lista', amizadeController.listarAmizades);
+
 module.exports = router;
