@@ -27,8 +27,7 @@ const connectToPostgres = async () => {
 const connectToMongo = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
-      dbName: 'adedonha',
-      useUnifiedTopology: true,
+      dbName: 'adedonha'
     });
     console.log('Conectado ao MongoDB com sucesso');
   } catch (error) {
