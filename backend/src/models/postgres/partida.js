@@ -32,7 +32,7 @@ const Partida = sequelize.define('Partida', {
     defaultValue: DataTypes.NOW,
   },
 }, {
-  tableName: 'Partida', // Nome da tabela no banco de dados
+  tableName: 'partida', // Nome da tabela no banco de dados
   timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 

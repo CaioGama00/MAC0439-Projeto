@@ -27,7 +27,7 @@ const Rodada = sequelize.define('Rodada', {
     allowNull: false,
   },
 }, {
-  tableName: 'Rodada', // Nome da tabela no banco de dados
+  tableName: 'rodada', // Nome da tabela no banco de dados
   timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 

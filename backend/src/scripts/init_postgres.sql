@@ -1,101 +1,219 @@
--- Criar tabela Jogador
+-- Criar o banco de dados
+CREATE DATABASE adedonha;
+
+-- Conectar ao banco de dados
+\c adedonha
+
+-- Criar as tabelas
+
+-- Tabela Jogador
 CREATE TABLE "Jogador" (
   id_jogador SERIAL PRIMARY KEY,
-  username VARCHAR(50) UNIQUE NOT NULL,
-  nome VARCHAR(100),
-  email VARCHAR(100) UNIQUE NOT NULL,
-  senha VARCHAR(100) NOT NULL,
-  data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  e_assinante BOOLEAN DEFAULT FALSE,
-  creditos INT DEFAULT 0
+  username VARCHAR(50) NOT NULL,
+  nome VARCHAR(50) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  senha VARCHAR(255) NOT NULL,
+  data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  tipo VARCHAR(20) NOT NULL CHECK (tipo IN ('Gratuito', 'Premium', 'Admin'))
 );
 
--- Criar tabela Amizade
-CREATE TABLE "Amizade" (
-  id_jogador1 INT REFERENCES "Jogador"(id_jogador),
-  id_jogador2 INT REFERENCES "Jogador"(id_jogador),
-  status VARCHAR(20) DEFAULT 'pendente',
-  e_favorito BOOLEAN DEFAULT FALSE,
-  PRIMARY KEY (id_jogador1, id_jogador2)
-);
-
--- Criar tabela Tema
-CREATE TABLE "Tema" (
-  id_tema SERIAL PRIMARY KEY,
-  nome VARCHAR(100) NOT NULL,
-  descricao TEXT
-);
-
--- Criar tabela Partida
-CREATE TABLE "Partida" (
-  id_partida SERIAL PRIMARY KEY,
-  id_host INT REFERENCES "Jogador"(id_jogador),
-  id_ganhador INT REFERENCES "Jogador"(id_jogador),
-  estado VARCHAR(20) DEFAULT 'ativa',
-  data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Criar tabela Tema-Partida (relacionamento muitos-para-muitos)
-CREATE TABLE "Tema_Partida" (
-  id_partida INT REFERENCES "Partida"(id_partida),
-  id_tema INT REFERENCES "Tema"(id_tema),
-  PRIMARY KEY (id_partida, id_tema)
-);
-
--- Criar tabela Rodada
-CREATE TABLE "Rodada" (
-  id_partida INT REFERENCES "Partida"(id_partida),
-  numero_rodada INT,
-  stop_jogador INT REFERENCES "Jogador"(id_jogador),
-  letra_sorteada CHAR(1),
-  PRIMARY KEY (id_partida, numero_rodada)
-);
-
--- Criar tabela Resposta
-CREATE TABLE "Resposta" (
-  id_partida INT REFERENCES "Partida"(id_partida),
-  numero_rodada INT,
-  id_tema INT REFERENCES "Tema"(id_tema),
-  id_jogador INT REFERENCES "Jogador"(id_jogador),
-  resposta TEXT,
-  valida BOOLEAN DEFAULT TRUE,
-  PRIMARY KEY (id_partida, numero_rodada, id_tema, id_jogador)
-);
-
--- Criar tabela Historico
-CREATE TABLE "Historico" (
-  id_partida INT REFERENCES "Partida"(id_partida),
-  id_jogador INT REFERENCES "Jogador"(id_jogador),
-  pontuacao INT,
-  data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id_partida, id_jogador)
-);
-
--- Criar tabela Item
-CREATE TABLE "Item" (
+-- Tabela Item
+CREATE TABLE Item (
   id_item SERIAL PRIMARY KEY,
-  nome VARCHAR(100) NOT NULL,
-  raridade VARCHAR(50),
-  preco INT,
-  exclusivo_assinante BOOLEAN DEFAULT FALSE
+  nome VARCHAR(50) NOT NULL,
+  descricao VARCHAR(255) NOT NULL,
+  preco DECIMAL(10, 2) NOT NULL,
+  exclusivo_assinante BOOLEAN NOT NULL DEFAULT FALSE
 );
 
--- Criar tabela Inventario
-CREATE TABLE "Inventario" (
-  id_jogador INT REFERENCES "Jogador"(id_jogador),
-  id_item INT REFERENCES "Item"(id_item),
-  data_compra TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id_jogador, id_item)
+-- Tabela Inventario
+CREATE TABLE Inventario (
+  id_inventario SERIAL PRIMARY KEY,
+  id_jogador INTEGER NOT NULL,
+  id_item INTEGER NOT NULL,
+  quantidade INTEGER NOT NULL,
+  data_aquisicao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_jogador) REFERENCES Jogador (id_jogador),
+  FOREIGN KEY (id_item) REFERENCES Item (id_item)
 );
 
--- Inserir dados iniciais (opcional)
-INSERT INTO "Jogador" (username, nome, email, senha) VALUES
-('jogador1', 'Jogador Um', 'jogador1@example.com', 'senha123'),
-('jogador2', 'Jogador Dois', 'jogador2@example.com', 'senha123');
+-- Tabela Tema
+CREATE TABLE Tema (
+  id_tema SERIAL PRIMARY KEY,
+  nome VARCHAR(50) NOT NULL,
+  descricao VARCHAR(255) NOT NULL
+);
 
-INSERT INTO "Tema" (nome, descricao) VALUES
-('Times de Futebol', 'Nomes de times de futebol'),
-('Bandas', 'Nomes de bandas musicais');
+-- Tabela Partida
+CREATE TABLE Partida (
+  id_partida SERIAL PRIMARY KEY,
+  id_criador INTEGER NOT NULL,
+  estado VARCHAR(20) NOT NULL CHECK (estado IN ('criada', 'iniciada', 'finalizada')),
+  data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_criador) REFERENCES Jogador (id_jogador)
+);
 
--- Exibir todas as tabelas (para verificação)
-\dt;
+-- Tabela TemaPartida
+CREATE TABLE TemaPartida (
+  id_partida INTEGER NOT NULL,
+  id_tema INTEGER NOT NULL,
+  PRIMARY KEY (id_partida, id_tema),
+  FOREIGN KEY (id_partida) REFERENCES Partida (id_partida),
+  FOREIGN KEY (id_tema) REFERENCES Tema (id_tema)
+);
+
+-- Tabela JogadoresNaPartida
+CREATE TABLE JogadoresNaPartida (
+  id_partida INTEGER NOT NULL,
+  id_jogador INTEGER NOT NULL,
+  pontuacao_final INTEGER NOT NULL,
+  PRIMARY KEY (id_partida, id_jogador),
+  FOREIGN KEY (id_partida) REFERENCES Partida (id_partida),
+  FOREIGN KEY (id_jogador) REFERENCES Jogador (id_jogador)
+);
+
+-- Tabela Rodada com chave primária composta (id_partida, numero_rodada)
+CREATE TABLE Rodada (
+  id_partida INTEGER NOT NULL,
+  numero_rodada INTEGER NOT NULL,
+  letra_sorteada CHAR(1) NOT NULL,
+  tempo_limite INTEGER NOT NULL,
+  estado VARCHAR(20) NOT NULL CHECK (estado IN ('iniciada', 'finalizada')),
+  total_respostas INTEGER NOT NULL DEFAULT 0,
+  respostas_validas INTEGER NOT NULL DEFAULT 0,
+  votos_contestacao INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (id_partida, numero_rodada),
+  FOREIGN KEY (id_partida) REFERENCES Partida (id_partida)
+);
+
+-- Tabela Resposta com chave composta
+CREATE TABLE Resposta (
+  id_partida INTEGER NOT NULL,
+  numero_rodada INTEGER NOT NULL,
+  id_jogador INTEGER NOT NULL,
+  id_tema INTEGER NOT NULL,
+  resposta VARCHAR(255) NOT NULL,
+  valida BOOLEAN NOT NULL,
+  pontuacao INTEGER NOT NULL,
+  PRIMARY KEY (id_partida, numero_rodada, id_jogador, id_tema),
+  FOREIGN KEY (id_partida, numero_rodada) REFERENCES Rodada (id_partida, numero_rodada),
+  FOREIGN KEY (id_jogador) REFERENCES Jogador (id_jogador),
+  FOREIGN KEY (id_tema) REFERENCES Tema (id_tema)
+);
+
+-- Jogadores
+INSERT INTO Jogador (nome, username, email, senha, tipo)
+VALUES 
+  ('Caio Gama', 'caiogama','caio@usp.br', 'hash123', 'Gratuito'),
+  ('Natalya Aragão', 'nataragao', 'natalya@usp.br', 'hash456', 'Premium'),
+  ('Miqueias Lima', 'miqvlima','miqueias@usp.br', 'hash789', 'Admin'),
+  ('Lucas Ferreira', 'lucasferreira', 'lucas@usp.br', 'hashabc', 'Gratuito'),
+  ('Bruna Oliveira', 'brunaoliveira', 'bruna@usp.br', 'hashdef', 'Premium'),
+  ('Rafael Costa', 'rafaelcosta', 'rafael@usp.br', 'hashghi', 'Gratuito'),
+  ('Juliana Martins', 'jumartins','juliana@usp.br', 'hashjkl', 'Premium'),
+  ('André Souza', 'andresouza', 'andre@usp.br', 'hashmno', 'Gratuito');
+
+-- Itens
+INSERT INTO Item (nome, descricao, preco, exclusivo_assinante)
+VALUES
+  ('Chapéu Azul', 'Acessório para o avatar', 100.00, FALSE),
+  ('Fundo Espacial', 'Plano de fundo exclusivo', 200.00, TRUE),
+  ('Emoji Raro', 'Reação animada especial', 50.00, FALSE),
+  ('Óculos de Sol', 'Estilo no visual do personagem', 75.00, FALSE),
+  ('Camisa Gamer', 'Roupa exclusiva para premium', 150.00, TRUE),
+  ('Fundo Tropical', 'Plano de fundo temático de praia', 120.00, FALSE);
+
+-- Inventário
+INSERT INTO Inventario (id_jogador, id_item, quantidade)
+VALUES
+  (1, 1, 1), (1, 3, 2),
+  (2, 2, 1), (2, 4, 1),
+  (3, 5, 1),
+  (4, 6, 1),
+  (5, 1, 1),
+  (6, 3, 3),
+  (7, 2, 1),
+  (8, 4, 2);
+
+-- Temas
+INSERT INTO Tema (nome, descricao)
+VALUES
+  ('Animal', 'Animais do mundo'),
+  ('Fruta', 'Frutas diversas'),
+  ('País', 'Nomes de países'),
+  ('Cidade', 'Cidades do mundo'),
+  ('Objeto', 'Coisas em geral'),
+  ('Nome Próprio', 'Nomes de pessoas');
+
+-- Partidas
+INSERT INTO Partida (id_criador, estado)
+VALUES 
+  (1, 'iniciada'),
+  (2, 'finalizada'),
+  (3, 'iniciada'),
+  (4, 'finalizada');
+
+-- Temas nas partidas
+INSERT INTO TemaPartida (id_partida, id_tema)
+VALUES
+  (1, 1), (1, 2), (1, 3),
+  (2, 1), (2, 4), (2, 5),
+  (3, 2), (3, 3), (3, 6),
+  (4, 1), (4, 2), (4, 5);
+
+-- Jogadores nas partidas
+INSERT INTO JogadoresNaPartida (id_partida, id_jogador, pontuacao_final)
+VALUES
+  (1, 1, 30), (1, 2, 30), (1, 3, 30), (1, 4, 20),
+  (2, 5, 25), (2, 6, 15), (2, 7, 20),
+  (3, 2, 28), (3, 4, 18), (3, 8, 22),
+  (4, 1, 30), (4, 5, 25), (4, 6, 20);
+
+-- Rodadas
+INSERT INTO Rodada (id_partida, numero_rodada, letra_sorteada, tempo_limite, estado)
+VALUES
+  (1, 1, 'C', 60, 'finalizada'),
+  (1, 2, 'A', 60, 'finalizada'),
+  (2, 1, 'B', 60, 'finalizada'),
+  (3, 1, 'M', 60, 'iniciada'),
+  (4, 1, 'P', 60, 'finalizada'),
+  (4, 2, 'L', 60, 'finalizada');
+
+-- Respostas para partida 1, rodada 1, tema Animal
+INSERT INTO Resposta (id_partida, numero_rodada, id_jogador, id_tema, resposta, valida, pontuacao)
+VALUES
+  (1, 1, 1, 1, 'Cachorro', TRUE, 10),
+  (1, 1, 2, 1, 'Camelo', TRUE, 10),
+  (1, 1, 3, 1, 'Cavalo', TRUE, 10),
+  (1, 1, 4, 1, 'Cobra', TRUE, 10);
+
+-- Respostas para rodada 1, tema Fruta
+INSERT INTO Resposta (id_partida, numero_rodada, id_jogador, id_tema, resposta, valida, pontuacao)
+VALUES
+  (1, 1, 1, 2, 'Caju', TRUE, 10),
+  (1, 1, 2, 2, 'Cereja', TRUE, 10),
+  (1, 1, 3, 2, 'Caqui', TRUE, 10),
+  (1, 1, 4, 2, 'Cupuaçu', TRUE, 10);
+
+-- Respostas para rodada 1, tema País
+INSERT INTO Resposta (id_partida, numero_rodada, id_jogador, id_tema, resposta, valida, pontuacao)
+VALUES
+  (1, 1, 1, 3, 'Canadá', TRUE, 10),
+  (1, 1, 2, 3, 'Chile', TRUE, 10),
+  (1, 1, 3, 3, 'Croácia', TRUE, 10),
+  (1, 1, 4, 3, 'Colômbia', TRUE, 10);
+
+-- Mais respostas para outras partidas/rodadas
+-- Partida 2, Rodada 1, Tema Cidade
+INSERT INTO Resposta (id_partida, numero_rodada, id_jogador, id_tema, resposta, valida, pontuacao)
+VALUES
+  (2, 1, 5, 4, 'Barcelona', TRUE, 10),
+  (2, 1, 6, 4, 'Berlim', TRUE, 10),
+  (2, 1, 7, 4, 'Bruxelas', TRUE, 10);
+
+-- Partida 3, Rodada 1, Tema Nome Próprio
+INSERT INTO Resposta (id_partida, numero_rodada, id_jogador, id_tema, resposta, valida, pontuacao)
+VALUES
+  (3, 1, 2, 6, 'Maria', TRUE, 10),
+  (3, 1, 4, 6, 'Miguel', TRUE, 10),
+  (3, 1, 8, 6, 'Melissa', TRUE, 10);

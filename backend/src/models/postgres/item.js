@@ -24,7 +24,7 @@ const Item = sequelize.define('Item', {
     defaultValue: false,
   },
 }, {
-  tableName: 'Item', // Nome da tabela no banco de dados
+  tableName: 'item', // Nome da tabela no banco de dados
   timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 

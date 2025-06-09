@@ -14,7 +14,7 @@ const Jogador = sequelize.define('Jogador', {
   },
   nome: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   email: {
     type: DataTypes.STRING,
@@ -29,17 +29,13 @@ const Jogador = sequelize.define('Jogador', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-  e_assinante: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
-  creditos: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
+  tipo: {
+    type: DataTypes.ENUM('Gratuito', 'Premium', 'Admin'),
+    allowNull: false,
   },
 }, {
-  tableName: 'Jogador', // Nome da tabela no banco de dados
-  timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
+  tableName: 'jogador',
+  timestamps: false,
 });
 
 module.exports = Jogador;

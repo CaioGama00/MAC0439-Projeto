@@ -27,7 +27,7 @@ const Amizade = sequelize.define('Amizade', {
     defaultValue: false,
   },
 }, {
-  tableName: 'Amizade', // Nome da tabela no banco de dados
+  tableName: 'amizade', // Nome da tabela no banco de dados
   timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 

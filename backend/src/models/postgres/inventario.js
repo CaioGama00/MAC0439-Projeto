@@ -23,7 +23,7 @@ const Inventario = sequelize.define('Inventario', {
     defaultValue: DataTypes.NOW,
   },
 }, {
-  tableName: 'Inventario', // Nome da tabela no banco de dados
+  tableName: 'inventario', // Nome da tabela no banco de dados
   timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 

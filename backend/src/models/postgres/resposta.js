@@ -39,7 +39,7 @@ const Resposta = sequelize.define('Resposta', {
     defaultValue: true,
   },
 }, {
-  tableName: 'Resposta', // Nome da tabela no banco de dados
+  tableName: 'resposta', // Nome da tabela no banco de dados
   timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 

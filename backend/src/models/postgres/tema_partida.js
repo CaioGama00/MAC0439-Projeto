@@ -20,7 +20,7 @@ const TemaPartida = sequelize.define('TemaPartida', {
     },
   },
 }, {
-  tableName: 'Tema_Partida', // Nome da tabela no banco de dados
+  tableName: 'tema_partida', // Nome da tabela no banco de dados
   timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 

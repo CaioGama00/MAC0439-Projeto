@@ -27,7 +27,7 @@ const Historico = sequelize.define('Historico', {
     defaultValue: DataTypes.NOW,
   },
 }, {
-  tableName: 'Historico', // Nome da tabela no banco de dados
+  tableName: 'historico', // Nome da tabela no banco de dados
   timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 

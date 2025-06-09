@@ -16,7 +16,7 @@ const Tema = sequelize.define('Tema', {
     allowNull: true,
   },
 }, {
-  tableName: 'Tema', // Nome da tabela no banco de dados
+  tableName: 'tema', // Nome da tabela no banco de dados
   timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
 });
 
