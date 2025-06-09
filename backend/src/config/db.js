@@ -28,7 +28,6 @@ const connectToMongo = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
       dbName: 'adedonha',
-      useNewUrlParser: true,
       useUnifiedTopology: true,
     });
     console.log('Conectado ao MongoDB com sucesso');
@@ -46,8 +45,7 @@ let driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
 const connectToNeo4j = async () => {
   try {
     const serverInfo = await driver.getServerInfo()
-    console.log('Connection established')
-    console.log(serverInfo)
+    console.log('Conectado ao Neo4j com sucesso')
   } catch(err) {
     console.log(`Connection error\n${err}\nCause: ${err.cause}`)
   }
