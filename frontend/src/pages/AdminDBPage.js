@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { obterToken, obterTipoUsuario, estaAutenticado, removerDadosAutenticacao } from '../utils/auth';
-import './AdminDBPage.css'; // Criaremos este arquivo CSS
+import './AdminDBPage.css'; 
 
 // Wrapper simples para chamadas de API
 const api = {
@@ -42,7 +42,7 @@ const AdminDBPage = () => {
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState('');
   const [tableData, setTableData] = useState([]);
-  const [query, setQuery] = useState('SELECT * FROM "Jogador" LIMIT 10;');
+  const [query, setQuery] = useState('SELECT * FROM jogador LIMIT 10;');
   const [queryResult, setQueryResult] = useState(null);
   const [error, setError] = useState('');
   const [loadingData, setLoadingData] = useState(false);

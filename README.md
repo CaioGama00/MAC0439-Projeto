@@ -66,13 +66,12 @@ cd MAC0439-Projeto
    ```bash
    npm install
    ```
-3. Configure o arquivo `.env` conforme instruções no `README.md` do frontend.
-4. Inicie o frontend:
+3. Inicie o frontend:
    ```bash
    npm start
    ```
 
-O frontend estará disponível em `http://localhost:3000` e o backend em `http://localhost:5000`.
+O frontend estará disponível em `http://localhost:3000` e o backend em `http://localhost:8000`.
 
 ## Licença
 

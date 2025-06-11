@@ -69,7 +69,7 @@ Para iniciar o servidor, execute:
 node src/server.js
 ```
 
-O backend estará disponível em [http://localhost:5000](http://localhost:5000).
+O backend estará disponível em [http://localhost:8000](http://localhost:8000).
 
 ## Estrutura do Projeto
 
