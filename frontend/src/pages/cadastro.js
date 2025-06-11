@@ -8,6 +8,7 @@ import './cadastro.css'; // Estilos específicos para cadastro
 const Cadastro = () => {
   const [formData, setFormData] = useState({
     username: '',
+    nome: '', // Adicionar campo nome
     email: '',
     senha: '',
     confirmarSenha: ''
@@ -46,12 +47,13 @@ const Cadastro = () => {
       // Chamada para a API de cadastro
       const response = await cadastrar(
         formData.username,
+        formData.nome, // Enviar o nome
         formData.senha,
         formData.email
       );
 
-      // Salva os dados de autenticação
-      salvarDadosAutenticacao(response.token, response.id_jogador);
+      // Salva os dados de autenticação, incluindo o tipo de usuário
+      salvarDadosAutenticacao(response.token, response.id_jogador, response.tipo);
       
       // Redireciona para o lobby após cadastro bem-sucedido
       navigate('/lobby');
@@ -90,6 +92,20 @@ const Cadastro = () => {
             required
             minLength="3"
             maxLength="20"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="nome">Nome</label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            value={formData.nome}
+            onChange={handleChange}
+            required
+            minLength="3"
+            maxLength="50"
           />
         </div>
         

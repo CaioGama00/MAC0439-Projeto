@@ -21,7 +21,6 @@ const criarPartida = async (req, res) => {
 
 // Buscar partidas ativas
 const buscarPartidasAtivas = async (req, res) => {
-  console.log("Chegou aqui!");
   try {
     const partidas = await partidaService.buscarPartidasAtivas();
     res.status(200).json({

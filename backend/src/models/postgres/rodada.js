@@ -1,34 +1,44 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db').sequelize;
+const { Model, DataTypes } = require('sequelize');
 
-const Rodada = sequelize.define('Rodada', {
-  id_partida: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    references: {
-      model: 'Partida', // Referência à tabela Partida
-      key: 'id_partida',
-    },
-  },
-  numero_rodada: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-  },
-  stop_jogador: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: 'Jogador', // Referência à tabela Jogador
-      key: 'id_jogador',
-    },
-  },
-  letra_sorteada: {
-    type: DataTypes.STRING(1),
-    allowNull: false,
-  },
-}, {
-  tableName: 'rodada', // Nome da tabela no banco de dados
-  timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
-});
+class Rodada extends Model {
+  static associate(models) {
+    Rodada.belongsTo(models.Partida, {
+      foreignKey: 'id_partida',
+      as: 'partida'
+    });
+    Rodada.belongsTo(models.Jogador, {
+      foreignKey: 'stop_jogador',
+      as: 'jogadorQueDeuStop',
+      allowNull: true
+    });
 
-module.exports = Rodada;
+  }
+}
+
+module.exports = (sequelize, DataTypes) => {
+  Rodada.init({
+    id_partida: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      // references: { model: 'Partida', key: 'id_partida' } // Definido na associação
+    },
+    numero_rodada: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+    },
+    stop_jogador: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    letra_sorteada: {
+      type: DataTypes.STRING(1),
+      allowNull: false,
+    },
+  }, {
+    sequelize,
+    modelName: 'Rodada',
+    tableName: 'rodada',
+    timestamps: false,
+  });
+  return Rodada;
+};

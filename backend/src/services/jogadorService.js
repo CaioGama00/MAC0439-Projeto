@@ -1,40 +1,45 @@
 // src/services/jogadorService.js
-const jogador = require('../models/postgres/jogador');
+const { models } = require('../config/db'); // Importa o objeto models
+const { Jogador } = models; // Corrigido para 'Jogador' (PascalCase)
 const { hashPassword, comparePassword } = require('../config/auth');
 
 // Cadastrar um novo jogador
-const cadastrarJogador = async (username, email, senha) => {
+const cadastrarJogador = async (username, nome, email, senha) => { // Adicionar nome como parâmetro
   try {
     // Verifica se username ou email já existem
-    const existeUsername = await jogador.findOne({ where: { username } });
+    const existeUsername = await Jogador.findOne({ where: { username } });
     if (existeUsername) {
       throw new Error('Username já está em uso');
     }
 
-    const existeEmail = await jogador.findOne({ where: { email } });
+    const existeEmail = await Jogador.findOne({ where: { email } });
     if (existeEmail) {
       throw new Error('Email já está em uso');
     }
 
     const senhaHash = await hashPassword(senha);
-    const novoJogador = await jogador.create({
+    const novoJogador = await Jogador.create({
       username,
+      nome, // Incluir nome na criação
       email,
       senha: senhaHash,
+      tipo: 'Gratuito' 
     });
 
-    return novoJogador;
+    // Retornar um objeto plano para garantir que todos os campos, incluindo 'tipo',
+    // sejam corretamente passados adiante, especialmente para a geração do token.
+    return novoJogador.get({ plain: true });
   } catch (error) {
-    console.error('Erro detalhado:', error);
+    // O erro já está sendo logado no controller, mas pode manter se quiser um log específico aqui.
     throw new Error(`Erro ao cadastrar jogador: ${error.message}`);
   }
 };
 
 const autenticarJogador = async (username, senha) => {
   try {
-    const jogadorEncontrado = await jogador.findOne({ 
+    const jogadorEncontrado = await Jogador.findOne({ 
       where: { username },
-      attributes: ['id_jogador', 'username', 'email', 'senha']
+      attributes: ['id_jogador', 'username', 'email', 'senha', 'tipo']
     });
     
     if (!jogadorEncontrado) {
@@ -56,7 +61,7 @@ const autenticarJogador = async (username, senha) => {
 // Buscar perfil de um jogador
 const buscarPerfil = async (idJogador) => {
   try {
-    const jogadorEncontrado = await jogador.findByPk(idJogador, {
+    const jogadorEncontrado = await Jogador.findByPk(idJogador, {
       attributes: { exclude: ['senha'] },
     });
 
@@ -74,7 +79,7 @@ const buscarPerfil = async (idJogador) => {
 const atualizarPerfil = async (idJogador, dadosAtualizacao) => {
   try {
     // Verifica se o jogador existe
-    const jogadorExistente = await jogador.findByPk(idJogador);
+    const jogadorExistente = await Jogador.findByPk(idJogador);
     if (!jogadorExistente) {
       throw new Error('Jogador não encontrado');
     }
@@ -97,7 +102,7 @@ const atualizarPerfil = async (idJogador, dadosAtualizacao) => {
 
     // Verifica se novo username já existe (se estiver sendo alterado)
     if (camposParaAtualizar.username && camposParaAtualizar.username !== jogadorExistente.username) {
-      const usernameExistente = await jogador.findOne({ 
+      const usernameExistente = await Jogador.findOne({ 
         where: { username: camposParaAtualizar.username } 
       });
       if (usernameExistente) {
@@ -107,7 +112,7 @@ const atualizarPerfil = async (idJogador, dadosAtualizacao) => {
 
     // Verifica se novo email já existe (se estiver sendo alterado)
     if (camposParaAtualizar.email && camposParaAtualizar.email !== jogadorExistente.email) {
-      const emailExistente = await jogador.findOne({ 
+      const emailExistente = await Jogador.findOne({ 
         where: { email: camposParaAtualizar.email } 
       });
       if (emailExistente) {
@@ -116,12 +121,12 @@ const atualizarPerfil = async (idJogador, dadosAtualizacao) => {
     }
 
     // Executa a atualização
-    await jogador.update(camposParaAtualizar, {
+    await Jogador.update(camposParaAtualizar, {
       where: { id_jogador: idJogador }
     });
 
     // Retorna os dados atualizados (excluindo a senha)
-    const jogadorAtualizado = await jogador.findByPk(idJogador, {
+    const jogadorAtualizado = await Jogador.findByPk(idJogador, {
       attributes: { exclude: ['senha'] }
     });
 

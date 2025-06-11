@@ -1,5 +1,5 @@
 -- Criar o banco de dados
-CREATE DATABASE adedonha;
+
 
 -- Conectar ao banco de dados
 \c adedonha
@@ -7,7 +7,7 @@ CREATE DATABASE adedonha;
 -- Criar as tabelas
 
 -- Tabela Jogador
-CREATE TABLE "Jogador" (
+CREATE TABLE Jogador (
   id_jogador SERIAL PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
   nome VARCHAR(50) NOT NULL,
@@ -48,9 +48,11 @@ CREATE TABLE Tema (
 CREATE TABLE Partida (
   id_partida SERIAL PRIMARY KEY,
   id_criador INTEGER NOT NULL,
-  estado VARCHAR(20) NOT NULL CHECK (estado IN ('criada', 'iniciada', 'finalizada')),
+  id_ganhador INTEGER,
+  estado VARCHAR(20) NOT NULL CHECK (estado IN ('criada', 'ativa', 'finalizada')),
   data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_criador) REFERENCES Jogador (id_jogador)
+  FOREIGN KEY (id_criador) REFERENCES Jogador (id_jogador),
+  FOREIGN KEY (id_ganhador) REFERENCES Jogador (id_jogador)
 );
 
 -- Tabela TemaPartida
@@ -75,6 +77,7 @@ CREATE TABLE JogadoresNaPartida (
 -- Tabela Rodada com chave primária composta (id_partida, numero_rodada)
 CREATE TABLE Rodada (
   id_partida INTEGER NOT NULL,
+  stop_jogador INTEGER,
   numero_rodada INTEGER NOT NULL,
   letra_sorteada CHAR(1) NOT NULL,
   tempo_limite INTEGER NOT NULL,
@@ -83,7 +86,8 @@ CREATE TABLE Rodada (
   respostas_validas INTEGER NOT NULL DEFAULT 0,
   votos_contestacao INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (id_partida, numero_rodada),
-  FOREIGN KEY (id_partida) REFERENCES Partida (id_partida)
+  FOREIGN KEY (id_partida) REFERENCES Partida (id_partida),
+  FOREIGN KEY (stop_jogador) REFERENCES Jogador (id_jogador) ON DELETE SET NULL
 );
 
 -- Tabela Resposta com chave composta
@@ -146,12 +150,13 @@ VALUES
   ('Nome Próprio', 'Nomes de pessoas');
 
 -- Partidas
-INSERT INTO Partida (id_criador, estado)
+INSERT INTO Partida (id_criador, estado, id_ganhador)
 VALUES 
-  (1, 'iniciada'),
-  (2, 'finalizada'),
-  (3, 'iniciada'),
-  (4, 'finalizada');
+  (1, 'finalizada', 2), 
+  (2, 'finalizada', 2), 
+  (3, 'ativa', NULL),    
+  (4, 'finalizada', 1), 
+  (1, 'ativa', NULL);
 
 -- Temas nas partidas
 INSERT INTO TemaPartida (id_partida, id_tema)
@@ -170,23 +175,24 @@ VALUES
   (4, 1, 30), (4, 5, 25), (4, 6, 20);
 
 -- Rodadas
-INSERT INTO Rodada (id_partida, numero_rodada, letra_sorteada, tempo_limite, estado)
+INSERT INTO Rodada (id_partida, numero_rodada, letra_sorteada, tempo_limite, estado, stop_jogador)
 VALUES
-  (1, 1, 'C', 60, 'finalizada'),
-  (1, 2, 'A', 60, 'finalizada'),
-  (2, 1, 'B', 60, 'finalizada'),
-  (3, 1, 'M', 60, 'iniciada'),
-  (4, 1, 'P', 60, 'finalizada'),
-  (4, 2, 'L', 60, 'finalizada');
+  (1, 1, 'C', 60, 'finalizada', 1),
+  (1, 2, 'A', 60, 'finalizada', 2),
+  (2, 1, 'B', 60, 'finalizada', 2),
+  (3, 1, 'M', 60, 'iniciada', NULL),
+  (4, 1, 'P', 60, 'finalizada', 4),
+  (4, 2, 'L', 60, 'finalizada', 1),
+  (5, 1, 'S', 60, 'iniciada', NULL);
 
 -- Respostas para partida 1, rodada 1, tema Animal
 INSERT INTO Resposta (id_partida, numero_rodada, id_jogador, id_tema, resposta, valida, pontuacao)
 VALUES
   (1, 1, 1, 1, 'Cachorro', TRUE, 10),
-  (1, 1, 2, 1, 'Camelo', TRUE, 10),
-  (1, 1, 3, 1, 'Cavalo', TRUE, 10),
-  (1, 1, 4, 1, 'Cobra', TRUE, 10);
-
+  (1, 1, 2, 1, 'Camelo', TRUE, 10), 
+  (1, 1, 3, 1, 'Cavalo', TRUE, 5),
+  (1, 1, 4, 1, 'Cabra', TRUE, 5);
+  
 -- Respostas para rodada 1, tema Fruta
 INSERT INTO Resposta (id_partida, numero_rodada, id_jogador, id_tema, resposta, valida, pontuacao)
 VALUES

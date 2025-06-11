@@ -15,8 +15,12 @@ const Lobby = () => {
   useEffect(() => {
     const fetchPartidas = async () => {
       try {
-        const partidasAtivas = await buscarPartidasAtivas();
-        setPartidas(partidasAtivas);
+        const response = await buscarPartidasAtivas();
+        if (response && response.success && Array.isArray(response.data)) {
+          setPartidas(response.data);
+        } else {
+          setErro('Erro ao carregar partidas: formato de dados inesperado.');
+        }
       } catch (error) {
         setErro('Erro ao carregar partidas ativas.');
       }
@@ -28,8 +32,12 @@ const Lobby = () => {
   // Função para criar uma nova partida
   const handleCriarPartida = async (temas) => {
     try {
-      const novaPartida = await criarPartida(obterJogadorId(), temas);
-      setPartidas([...partidas, novaPartida]);
+      const response = await criarPartida(obterJogadorId(), temas);
+      if (response && response.success && response.data) {
+        setPartidas(prevPartidas => [...prevPartidas, response.data]);
+      } else {
+        setErro('Erro ao criar partida: resposta inesperada.');
+      }
       setMostrarTemaSelector(false);
     } catch (error) {
       setErro('Erro ao criar partida.');

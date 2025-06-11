@@ -1,8 +1,6 @@
 // src/services/partidaService.js
-const partida = require('../models/postgres/partida');
-const tema = require('../models/postgres/tema');
-const rodada = require('../models/postgres/rodada');
-const resposta = require('../models/postgres/resposta');
+const { models } = require('../config/db'); // Importa o objeto models
+const { Partida, Tema, Jogador, Rodada, Resposta } = models; // Corrigido para PascalCase
 
 // Criar uma nova partida
 const criarPartida = async (idHost, temas) => {
@@ -13,7 +11,7 @@ const criarPartida = async (idHost, temas) => {
     }
 
     // Verifica se os temas existem
-    const temasExistentes = await tema.findAll({
+    const temasExistentes = await Tema.findAll({
       where: {
         id: temas
       }
@@ -24,8 +22,8 @@ const criarPartida = async (idHost, temas) => {
     }
 
     // Cria a partida
-    const novaPartida = await partida.create({
-      id_host: idHost,
+    const novaPartida = await Partida.create({
+      id_criador: idHost,
       estado: 'ativa'
     });
 
@@ -34,7 +32,7 @@ const criarPartida = async (idHost, temas) => {
 
     return {
       id: novaPartida.id,
-      id_host: novaPartida.id_host,
+      id_criador: novaPartida.id_criador,
       estado: novaPartida.estado,
       temas: temasExistentes.map(tema => tema.nome)
     };
@@ -47,22 +45,28 @@ const criarPartida = async (idHost, temas) => {
 // Buscar partidas ativas
 const buscarPartidasAtivas = async () => {
   try {
-    const partidas = await partida.findAll({
+    const partidas = await Partida.findAll({
       where: { estado: 'ativa' },
       include: [
         {
-          model: tema,
-          attributes: ['id', 'nome'],
-          through: { attributes: [] } // Não retorna dados da tabela de associação
+          model: Tema,
+          as: 'Temas', 
+          attributes: ['id_tema', 'nome'],
+          through: { attributes: [] } 
+        },
+        {
+          model: Jogador,
+          as: 'host', 
+          attributes: ['id_jogador', 'username'] 
         }
       ]
     });
 
     return partidas.map(partida => ({
-      id: partida.id,
-      id_host: partida.id_host,
+      id: partida.id, 
+      host: partida.host ? partida.host.username : null, 
       estado: partida.estado,
-      temas: partida.Temas.map(tema => tema.nome)
+      temas: partida.Temas ? partida.Temas.map(t => t.nome) : [] 
     }));
   } catch (error) {
     console.error('Erro ao buscar partidas ativas:', error);
@@ -74,8 +78,8 @@ const buscarPartidasAtivas = async () => {
 const iniciarRodada = async (partidaId) => {
   try {
     // Verifica se a partida existe e está ativa
-    const partida = await partida.findByPk(partidaId);
-    if (!partida || partida.estado !== 'ativa') {
+    const partidaEncontrada = await Partida.findByPk(partidaId);
+    if (!partidaEncontrada || partidaEncontrada.estado !== 'ativa') {
       throw new Error('partida não encontrada ou já encerrada');
     }
 
@@ -83,9 +87,9 @@ const iniciarRodada = async (partidaId) => {
     const letraSorteada = String.fromCharCode(65 + Math.floor(Math.random() * 26));
 
     // Cria a nova rodada
-    const novaRodada = await rodada.create({
+    const novaRodada = await Rodada.create({
       id_partida: partidaId,
-      numero_rodada: await rodada.count({ where: { id_partida: partidaId } }) + 1,
+      numero_rodada: await Rodada.count({ where: { id_partida: partidaId } }) + 1,
       letra_sorteada: letraSorteada
     });
 
@@ -100,23 +104,23 @@ const iniciarRodada = async (partidaId) => {
 const enviarResposta = async (partidaId, rodadaId, idJogador, idTema, resposta) => {
   try {
     // Verifica se a partida e rodada existem
-    const partida = await partida.findByPk(partidaId);
-    if (!partida) throw new Error('Partida não encontrada');
+    const partidaEncontrada = await Partida.findByPk(partidaId);
+    if (!partidaEncontrada) throw new Error('Partida não encontrada');
 
-    const rodada = await rodada.findOne({
+    const rodadaEncontrada = await Rodada.findOne({
       where: {
         id_partida: partidaId,
         numero_rodada: rodadaId
       }
     });
-    if (!rodada) throw new Error('Rodada não encontrada');
+    if (!rodadaEncontrada) throw new Error('Rodada não encontrada');
 
     // Verifica se o tema é válido para esta partida
-    const temaNaPartida = await partida.hasTema(idTema);
+    const temaNaPartida = await partidaEncontrada.hasTema(idTema);
     if (!temaNaPartida) throw new Error('Tema não válido para esta partida');
 
     // Cria a resposta
-    const respostaSalva = await resposta.create({
+    const respostaSalva = await Resposta.create({
       id_partida: partidaId,
       numero_rodada: rodadaId,
       id_tema: idTema,

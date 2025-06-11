@@ -5,12 +5,13 @@ import axios from 'axios';
 const API_BASE_URL = 'http://localhost:8000/api';
 
 // Função para cadastrar um novo usuário
-export const cadastrar = async (username, senha, email) => {
+export const cadastrar = async (username, nome, senha, email) => { // Adicionar nome
   try {
     const response = await axios.post(`${API_BASE_URL}/jogador/cadastro`, {
       username,
       senha,
       email,
+      nome, // Incluir nome no corpo da requisição
     });
     return response.data;
   } catch (error) {
@@ -40,7 +41,7 @@ export const login = async (username, senha) => {
 // Função para criar uma nova partida
 export const criarPartida = async (idHost, temas) => {
   try {
-    const response = await axios.post('/partida/criar', { idHost, temas });
+    const response = await axios.post(`${API_BASE_URL}/partida/criar`, { idHost, temas });
     return response.data;
   } catch (error) {
     console.error('Erro ao criar partida:', error.response?.data || error.message);
@@ -51,7 +52,7 @@ export const criarPartida = async (idHost, temas) => {
 // Função para buscar partidas ativas
 export const buscarPartidasAtivas = async () => {
   try {
-    const response = await axios.get('/partida/ativas');
+    const response = await axios.get(`${API_BASE_URL}/partida/ativas`);
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar partidas ativas:', error.response?.data || error.message);
@@ -62,7 +63,7 @@ export const buscarPartidasAtivas = async () => {
 // Função para enviar uma resposta
 export const enviarResposta = async (partidaId, rodadaId, idJogador, idTema, resposta) => {
   try {
-    const response = await axios.post(`/partida/${partidaId}/rodada/${rodadaId}/enviar-resposta`, {
+    const response = await axios.post(`${API_BASE_URL}/partida/${partidaId}/rodada/${rodadaId}/enviar-resposta`, {
       idTema,
       resposta,
       idJogador

@@ -35,8 +35,8 @@ const Login = () => {
       setCarregando(true);
       const response = await login(formData.username, formData.senha);
       
-      // Salva ambos token e ID
-      salvarDadosAutenticacao(response.token, response.id_jogador);
+      // Salva token, ID e tipo de usuário
+      salvarDadosAutenticacao(response.token, response.id_jogador, response.tipo);
       navigate('/lobby');
     } catch (error) {
       console.error('Erro no login:', error);

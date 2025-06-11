@@ -1,0 +1,89 @@
+/* c:/Users/maues/OneDrive/Documents/GitHub/MAC0439-Projeto/frontend/src/pages/AdminDBPage.css */
+.admin-db-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  background-color: #f4f7f6;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.admin-db-container h1, .admin-db-container h2, .admin-db-container h3 {
+  color: #333;
+  margin-top: 0;
+}
+
+.admin-db-container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.admin-db-container section {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.admin-db-container select,
+.admin-db-container textarea,
+.admin-db-container button {
+  padding: 12px 15px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.admin-db-container select, .admin-db-container textarea {
+  width: 100%;
+}
+
+.admin-db-container button {
+  background-color: #5cb85c;
+  color: white;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.admin-db-container button:hover {
+  background-color: #4cae4c;
+}
+
+.admin-db-container button:disabled {
+  background-color: #d3d3d3;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #a94442;
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border: 1px solid #faebcc;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.table-data-viewer {
+  margin-top: 15px; max-height: 400px; overflow: auto; border: 1px solid #ddd;
+}
+.table-data-viewer table { width: 100%; border-collapse: collapse; }
+.table-data-viewer th, .table-data-viewer td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 0.9rem; }
+.table-data-viewer th { background-color: #f0f0f0; position: sticky; top: 0; z-index: 1; }
+
+.query-result-viewer { margin-top: 15px; background-color: #e9ecef; padding: 15px; border-radius: 6px; max-height: 300px; overflow: auto; }
+.query-result-viewer pre { white-space: pre-wrap; word-wrap: break-word; font-size: 0.9rem; color: #333; }

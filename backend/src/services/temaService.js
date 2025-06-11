@@ -1,10 +1,11 @@
 // src/services/temaService.js
-const tema = require('../models/postgres/tema');
+const { models } = require('../config/db'); // Importa o objeto models
+const { Tema } = models; // Corrigido para 'Tema' (PascalCase)
 
 // Buscar todos os temas
 const buscarTemas = async () => {
   try {
-    const temas = await tema.findAll();
+    const temas = await Tema.findAll();
     return temas;
   } catch (error) {
     throw new Error(`Erro ao buscar temas: ${error.message}`);
@@ -14,7 +15,7 @@ const buscarTemas = async () => {
 // Criar um novo tema
 const criarTema = async (nome, descricao) => {
   try {
-    const novoTema = await tema.create({ nome, descricao });
+    const novoTema = await Tema.create({ nome, descricao });
     return novoTema;
   } catch (error) {
     throw new Error(`Erro ao criar tema: ${error.message}`);

@@ -1,23 +1,38 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db').sequelize;
+const { Model, DataTypes } = require('sequelize');
 
-const Tema = sequelize.define('Tema', {
-  id_tema: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  nome: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  descricao: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-}, {
-  tableName: 'tema', // Nome da tabela no banco de dados
-  timestamps: false, // Desativa os campos `createdAt` e `updatedAt`
-});
+class Tema extends Model {
+  static associate(models) {
+    // Associação N:M com Partida através da tabela TemaPartida
+    Tema.belongsToMany(models.Partida, {
+      through: models.TemaPartida, // Use o modelo TemaPartida
+      foreignKey: 'id_tema',
+      otherKey: 'id_partida',
+      as: 'Partidas' // Alias opcional
+    });
+    // Adicione outras associações de Tema aqui se necessário
+  }
+}
 
-module.exports = Tema;
+module.exports = (sequelize, DataTypes) => {
+  Tema.init({
+    id_tema: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    nome: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    descricao: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+  }, {
+    sequelize,
+    modelName: 'Tema',
+    tableName: 'tema',
+    timestamps: false,
+  });
+  return Tema;
+};

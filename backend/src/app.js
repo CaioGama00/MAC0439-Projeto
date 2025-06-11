@@ -13,7 +13,8 @@ const temaRoutes = require('./routes/temaRoutes');
 const amizadeRoutes = require('./routes/amizadeRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const itemRoutes = require('./routes/itemRoutes');
-const estatisticaRoutes = require('./routes/estatisticaRoutes')
+const estatisticaRoutes = require('./routes/estatisticaRoutes');
+const adminRoutes = require('./routes/adminRoutes'); // Importar rotas de admin
 
 // Inicialização do Express
 const app = express();
@@ -44,6 +45,7 @@ const startServer = async () => {
     app.use('/api/chat', chatRoutes);
     app.use('/api/item', itemRoutes);
     app.use('/api/estatisticas', estatisticaRoutes);
+    app.use('/api/admin', adminRoutes); // Adicionar rotas de admin
 
     // Rota de health check
     app.get('/health', (req, res) => {
