@@ -8,6 +8,7 @@ import PartidaPage from './pages/partidaPage';
 import Perfil from './pages/perfil';
 import Cadastro from './pages/cadastro'; 
 import AdminDBPage from './pages/AdminDBPage';
+import HistoricoPartidasPage from './pages/historicoPartidas'; // Importar página de histórico
 import Navbar from './components/navbar';
 import './styles/global.css'; // Importa os estilos globais
 
@@ -38,7 +39,10 @@ function App() {
 
           {/* Página de Administração do Banco de Dados */}
           <Route path="/admin/db" element={<AdminDBPage />} />
-          
+
+          {/* Página de Administração do Banco de Dados */}
+          <Route path="/historico" element={<HistoricoPartidasPage />} /> 
+
           {/* Rota padrão para páginas não encontradas (opcional) */}
           <Route path="*" element={<h1>Página não encontrada</h1>} />
         </Routes>

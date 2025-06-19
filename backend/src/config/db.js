@@ -51,7 +51,7 @@ const connectToPostgres = async () => {
 const connectToMongo = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
-      dbName: 'adedonha'
+      dbName: process.env.MONGO_DB
     });
     console.log('Conectado ao MongoDB com sucesso');
   } catch (error) {

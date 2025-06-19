@@ -1,0 +1,56 @@
+/* src/pages/HistoricoPartidasPage.css */
+.historico-container {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.historico-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.loading-historico, .erro-historico {
+    text-align: center;
+    font-size: 1.2em;
+    padding: 20px;
+}
+
+.erro-historico {
+    color: red;
+}
+
+.historico-lista {
+    list-style-type: none;
+    padding: 0;
+}
+
+.historico-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.historico-item h2 {
+    margin-top: 0;
+    color: #555;
+}
+
+.historico-item p {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+.jogadores-partida-lista {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.jogador-partida-item {
+    margin-bottom: 5px;
+}

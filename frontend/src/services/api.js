@@ -38,6 +38,21 @@ export const login = async (username, senha) => {
   }
 };
 
+// Função para buscar o histórico de partidas
+export const buscarHistorico = async (/* filtros e paginação aqui, ex: idJogador, page, limit */) => {
+  try {
+    // Adicionar query params se necessário:
+    // const params = new URLSearchParams();
+    // if (idJogador) params.append('idJogador', idJogador);
+    // if (page) params.append('page', page);
+    const response = await axios.get(`${API_BASE_URL}/historico/partidas`/*, { params }*/);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar histórico de partidas:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
 // Função para criar uma nova partida
 export const criarPartida = async (idHost, temas) => {
   try {

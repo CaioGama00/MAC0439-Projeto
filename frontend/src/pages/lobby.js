@@ -49,6 +49,10 @@ const Lobby = () => {
       <h1>Lobby</h1>
       {erro && <p className="erro">{erro}</p>}
 
+      <div>
+        <Link to="/historico" className="link-historico">Ver Histórico de Partidas</Link>
+      </div>
+      
       <button onClick={() => setMostrarTemaSelector(true)}>Criar Partida</button>
 
       {mostrarTemaSelector && (

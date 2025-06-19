@@ -28,3 +28,9 @@
   .partida-item a:hover {
     text-decoration: underline;
   }
+  
+  .link-historico {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 8px 15px;
+  }
