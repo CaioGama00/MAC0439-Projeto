@@ -1,5 +1,6 @@
 //src/middlewares/adminAuth.js
-const Jogador = require('../models/postgres/jogador');
+const { models } = require('../config/db'); // import initialized models from your DB config
+const Jogador = models.Jogador;
 const jwt = require('jsonwebtoken');
 
 // Middleware para verificar se o usuário está autenticado (exemplo, adapte se já tiver um)
@@ -20,6 +21,7 @@ const autenticarToken = (req, res, next) => {
 const isAdmin = async (req, res, next) => {
     try {
         // Se o tipo não estiver no token, ou para uma verificação mais robusta:
+
         const jogador = await Jogador.findByPk(req.jogadorId);
         if (!jogador) {
             return res.status(404).json({ message: 'Jogador não encontrado.' });
@@ -29,7 +31,7 @@ const isAdmin = async (req, res, next) => {
         }
         next();
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno ao verificar permissões de administrador.' });
+        res.status(500).json({ message: 'Erro interno ao verificar permissões de administrador asdas.' });
     }
 };
 

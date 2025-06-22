@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { obterToken, obterTipoUsuario, estaAutenticado, removerDadosAutenticacao } from '../utils/auth';
 import './AdminDBPage.css'; 
 
+const API_BASE_URL = 'http://localhost:8000/api';
+
 // Wrapper simples para chamadas de API
 const api = {
   request: async (url, method = 'GET', body = null) => {
@@ -11,11 +13,14 @@ const api = {
     const headers = {
       'Authorization': `Bearer ${token}`,
     };
+
     if (body) {
       headers['Content-Type'] = 'application/json';
     }
 
-    const response = await fetch(`/api${url}`, { // Ajuste a URL base se necessário (ex: process.env.REACT_APP_API_URL)
+    console.log('Fetching:', `/api${url}`);
+
+    const response = await fetch(`${API_BASE_URL}${url}`, { // Ajuste a URL base se necessário (ex: process.env.REACT_APP_API_URL)
       method,
       headers,
       body: body ? JSON.stringify(body) : null,
