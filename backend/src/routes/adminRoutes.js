@@ -11,8 +11,8 @@ router.use(isAdmin);       // Depois verifica se é admin
 
 // Listar todas as tabelas
 router.get('/db/tables', async (req, res, next) => {
+
     try {
-        console.log('Rota /api/admin/db/tables acessada');
         const tables = await sequelize.getQueryInterface().showAllTables();
         res.json(tables.sort());
     } catch (error) {
