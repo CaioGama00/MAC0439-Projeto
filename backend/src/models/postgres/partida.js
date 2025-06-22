@@ -19,6 +19,12 @@ class Partida extends Model {
       otherKey: 'id_tema',
       as: 'Temas'
     });
+    Partida.belongsToMany(models.Jogador, {
+      through: 'jogadoresnapartida',
+      as: 'Jogadores',
+      foreignKey: 'id_partida',
+      otherKey: 'id_jogador'
+    });
   }
 }
 
@@ -42,7 +48,7 @@ module.exports = (sequelize, DataTypes) => { // Exporta uma função
     },
     estado: {
       type: DataTypes.STRING,
-      defaultValue: 'ativa',
+      defaultValue: 'iniciada',
     },
     data_criacao: {
       type: DataTypes.DATE,
