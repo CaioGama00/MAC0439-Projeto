@@ -5,7 +5,12 @@ import { io } from 'socket.io-client';
 const SOCKET_SERVER_URL = 'http://localhost:8000';
 
 // Cria uma instância do Socket.IO
-const socket = io(SOCKET_SERVER_URL);
+const socket = io('http://localhost:8000', {
+  withCredentials: true,
+  extraHeaders: {
+    "my-custom-header": "abcd"
+  }
+});
 
 // Função para entrar em uma partida
 export const entrarPartida = (partidaId) => {
@@ -24,12 +29,22 @@ export const onNovaLetra = (callback) => {
 
 // Função para escutar novas mensagens no chat
 export const onNovaMensagem = (callback) => {
+  console.log("mensagem...")
+  socket.off('novaMensagem'); // garante que não duplica
   socket.on('novaMensagem', callback);
 };
 
 // Função para desconectar o Socket.IO
 export const desconectarSocket = () => {
   socket.disconnect();
+};
+
+export const emitirJogadorStop = (partidaId, idJogador, respostas) => {
+  socket.emit('jogadorStop', { partidaId, idJogador, respostas });
+};
+
+export const onJogadorStopOutro = (callback) => {
+  socket.on('jogadorStopOutro', callback);
 };
 
 export default socket;
