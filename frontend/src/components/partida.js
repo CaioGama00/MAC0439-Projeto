@@ -5,29 +5,16 @@ import { enviarResposta } from '../services/api';
 import { onNovaLetra } from '../services/socket';
 import './partida.css';
 
-const Partida = ({ partidaId }) => {
-  const [letra, setLetra] = useState('');
+const Partida = ({ partidaId, letra, mensagens, onNovaMensagem }) => {
   const [respostas, setRespostas] = useState([]);
-  const [mensagens, setMensagens] = useState([]);
-
-  // Escuta novas letras sorteadas
-  useEffect(() => {
-    const handleNovaLetra = (novaLetra) => {
-      setLetra(novaLetra);
-    };
-
-    onNovaLetra(handleNovaLetra);
-
-    return () => {
-      onNovaLetra(null); // Remove o listener ao desmontar o componente
-    };
-  }, []);
 
   const handleEnviarResposta = async (resposta) => {
     try {
       await enviarResposta(partidaId, 1, 1, resposta); // Substitua pelos IDs corretos
       setRespostas([...respostas, resposta]);
-      setMensagens([...mensagens, { id: mensagens.length + 1, texto: resposta, remetente: 'Você' }]);
+
+      // Notifica o parent sobre a nova mensagem
+      onNovaMensagem?.({ texto: resposta, remetente: 'Você' });
     } catch (error) {
       console.error('Erro ao enviar resposta:', error);
     }
