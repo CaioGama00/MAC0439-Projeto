@@ -1,16 +1,23 @@
-// src/components/TemaSelector.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { buscarTemas } from '../services/api';
 import './temaSelector.css';
 
 const TemaSelector = ({ onSelecionarTemas }) => {
+  const [temasDisponiveis, setTemasDisponiveis] = useState([]);
   const [temasSelecionados, setTemasSelecionados] = useState([]);
 
-  const temasDisponiveis = [
-    { id: 1, nome: 'Times de Futebol' },
-    { id: 2, nome: 'Bandas' },
-    { id: 3, nome: 'Países' },
-    { id: 4, nome: 'Filmes' },
-  ];
+  useEffect(() => {
+    const carregarTemas = async () => {
+      try {
+        const temas = await buscarTemas();
+        setTemasDisponiveis(temas);
+      } catch (error) {
+        console.error('Erro ao buscar temas:', error);
+      }
+    };
+
+    carregarTemas();
+  }, []);
 
   const handleSelecionarTema = (tema) => {
     if (temasSelecionados.includes(tema)) {
@@ -24,21 +31,30 @@ const TemaSelector = ({ onSelecionarTemas }) => {
     onSelecionarTemas(temasSelecionados);
   };
 
+  const toggleTheme = (themeId) => {
+    setTemasSelecionados((prev) => (prev.includes(themeId) ? prev.filter((id) => id !== themeId) : [...prev, themeId]))
+  }
+
   return (
-    <div className="tema-selector-container">
-      <h2>Escolha os temas para a partida:</h2>
-      <div className="temas-lista">
-        {temasDisponiveis.map((tema) => (
-          <div
-            key={tema.id}
-            className={`tema-item ${temasSelecionados.includes(tema) ? 'selecionado' : ''}`}
-            onClick={() => handleSelecionarTema(tema)}
-          >
-            {tema.nome}
-          </div>
-        ))}
+    <div >
+      <div className="form-group">
+        <h3>Escolha os temas para a partida:</h3>
+        <div className="themes-grid">
+          {temasDisponiveis.map((theme) => (
+            <button
+              key={theme.id_tema}
+              className={`theme-button ${
+                temasSelecionados.includes(theme.id_tema) ? "theme-button-selected" : ""
+              }`}
+              onClick={() => toggleTheme(theme.id_tema)}
+            >
+              {theme.nome}
+            </button>
+          ))}
+        </div>
+        <p className="themes-counter">{temasSelecionados.length} tema(s) selecionado(s)</p>
       </div>
-      <button onClick={handleConfirmar}>Confirmar</button>
+      <button className="confirm-button" onClick={handleConfirmar}>Confirmar</button>
     </div>
   );
 };
