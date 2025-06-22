@@ -31,6 +31,7 @@ const Lobby = () => {
 
   // Função para criar uma nova partida
   const handleCriarPartida = async (temas) => {
+    console.log("temas: ", temas)
     try {
       const response = await criarPartida(obterJogadorId(), temas);
       if (response && response.success && response.data) {
@@ -45,31 +46,73 @@ const Lobby = () => {
   };
 
   return (
-    <div className="lobby-container">
-      <h1>Lobby</h1>
+    <div className="app">
       {erro && <p className="erro">{erro}</p>}
 
-      <div>
-        <Link to="/historico" className="link-historico">Ver Histórico de Partidas</Link>
-      </div>
+      <main className="main">
+        <div className="container">
+          <div className="create-section">
+            <div className="card">
+              <div className="card-header">
+                <h2 className="card-title"></h2>
+                <button className="create-button" onClick={() => setMostrarTemaSelector(true)}>Criar Partida</button>
+              </div>
+              <div className="card-content">
+                {mostrarTemaSelector && (
+                  <TemaSelector onSelecionarTemas={handleCriarPartida} />
+                )}
+              </div>
+            </div>
+          </div>
       
-      <button onClick={() => setMostrarTemaSelector(true)}>Criar Partida</button>
-
-      {mostrarTemaSelector && (
-        <TemaSelector onSelecionarTemas={handleCriarPartida} />
-      )}
-
-      <h2>Partidas Ativas</h2>
-      <ul className="partidas-lista">
-        {partidas.map((partida) => (
-          <li key={partida.id} className="partida-item">
-            <Link to={`/partida/${partida.id}`}>
-              Partida {partida.id} - Host: {partida.host}
-            </Link>
-            <p>Temas: {partida.temas.join(', ')}</p>
-          </li>
-        ))}
-      </ul>
+          <div className="matches-section">
+            <div className="card">
+              <div className="card-header">
+                <h2 className="card-title">
+                  <span className="title-icon">👥</span>
+                  Partidas Ativas
+                </h2>
+              </div>
+              <div className="card-content">
+                <div className="matches-list">
+                  {partidas.map((partida, index) => (
+                    <div key={index} className="match-card">
+                      <div className="match-content">
+                        <div className="match-info">
+                          <div className="host-info">
+                              <div className="host-name">
+                                  <span className="crown-icon">👑</span>
+                                  <span className="host-text">Host: {partida.host}</span>
+                                </div>
+                            </div>
+                          <div className="themes-info">
+                            <div className="themes-label">Temas:</div>
+                            <div className="themes-badges">
+                              {partida.temas.map((theme, index) => (
+                                <span key={index} className="theme-badge">
+                                  {theme}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="match-actions">
+                            <Link to={`/partida/iniciar/${partida.id}`}>
+                                <div className="join-button">
+                                  <span className="button-icon">▶️</span>
+                                  Entrar
+                                </div>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
