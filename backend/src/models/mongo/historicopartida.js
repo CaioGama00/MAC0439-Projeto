@@ -35,7 +35,7 @@ const historicoPartidaSchema = new mongoose.Schema({
     username: { type: String }
   },
   data_hora_inicio: { type: Date, required: true },
-  data_hora_fim: { type: Date, required: true },
+  data_hora_fim: { type: Date, required: false },
   temas: [temaSchema],
   letras_sorteadas: [String],
   jogadores: [jogadorPartidaSchema]

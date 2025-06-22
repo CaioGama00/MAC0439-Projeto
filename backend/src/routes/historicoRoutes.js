@@ -6,5 +6,5 @@ const historicoController = require('../controllers/historicoController');
 
 // Rota para buscar o histórico de partidas (protegida por autenticação)
 router.get('/partidas', historicoController.buscarHistoricoPartidas);
-
+router.get('/partidas/atualizar', historicoController.atualizarMongo);
 module.exports = router;
