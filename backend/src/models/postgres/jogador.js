@@ -13,6 +13,12 @@ class Jogador extends Model {
       as: 'partidasGanhas',
       allowNull: true // Ganhador pode ser nulo
     });
+    Jogador.belongsToMany(models.Partida, {
+      through: 'jogadoresnapartida',
+      as: 'partidas',
+      foreignKey: 'id_jogador',
+      otherKey: 'id_partida'
+    });
   }
 }
 
