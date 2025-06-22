@@ -43,6 +43,14 @@ function App() {
           {/* Página de Administração do Banco de Dados */}
           <Route path="/historico" element={<HistoricoPartidasPage />} /> 
 
+          {/* Página de Lobby (listagem de partidas) */}
+          <Route path="/lobby/criarpartida" element={<CriarPartida />} />
+
+          {/* Página da Partida */}
+          <Route path="/partida/:partidaId" element={<PartidaPage />} />
+
+          <Route path="/partida/iniciar/:partidaId" element={<IniciarRodadaPage />} />
+
           {/* Rota padrão para páginas não encontradas (opcional) */}
           <Route path="*" element={<h1>Página não encontrada</h1>} />
         </Routes>
