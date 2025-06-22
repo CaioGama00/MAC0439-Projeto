@@ -111,3 +111,28 @@ export const atualizarPerfil = async (idJogador, dados) => {
       throw error;
     }
   };
+
+export const buscarTemas = async () => {
+  const response = await axios.get(`${API_BASE_URL}/tema`);
+  return response.data;
+};
+
+export const jogadoresNaPartida = async (idPartida) => { 
+  try {
+    const response = await axios.get(`${API_BASE_URL}/partida/${idPartida}/jogadores`);
+    return response.data;
+  } catch (error) {
+      console.error('Erro ao obter jogadores na partida:', error);
+      throw error;
+    }
+}
+
+export const temasDaPartida = async (idPartida) => { 
+  try {
+    const response = await axios.get(`${API_BASE_URL}/partida/${idPartida}`);
+    return response.data;
+  } catch (error) {
+      console.error('Erro ao obter temas da partida:', error);
+      throw error;
+    }
+}
