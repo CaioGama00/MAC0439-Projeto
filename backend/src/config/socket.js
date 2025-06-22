@@ -5,8 +5,9 @@ const socketIO = require('socket.io');
 const configureSocket = (server) => {
   const io = socketIO(server, {
     cors: {
-      origin: '*', // Permite conexões de qualquer origem (ajuste para produção)
-      methods: ['GET', 'POST'], // Métodos HTTP permitidos
+      origin: 'http://localhost:3000', 
+      methods: ['GET', 'POST'],
+      credentials: true
     },
   });
 
@@ -27,7 +28,8 @@ const configureSocket = (server) => {
 
     // Evento para enviar uma mensagem no chat
     socket.on('enviarMensagem', (partidaId, mensagem) => {
-      io.to(partidaId).emit('novaMensagem', mensagem); // Envia a mensagem para todos na partida
+      io.to(partidaId).emit('novaMensagem', mensagem); 
+      console.log(`Jogador ${socket.id} enviou ${mensagem}`)// Envia a mensagem para todos na partida
     });
 
     // Evento de desconexão
