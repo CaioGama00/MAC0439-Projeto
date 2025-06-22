@@ -34,6 +34,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(1),
       allowNull: false,
     },
+    tempo_limite: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 60
+    },
+    estado: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      defaultValue: 'iniciada'
+    }
   }, {
     sequelize,
     modelName: 'Rodada',
