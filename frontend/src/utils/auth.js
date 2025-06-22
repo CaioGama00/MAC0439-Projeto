@@ -2,29 +2,29 @@
 
 // Função para salvar os dados de autenticação
 export const salvarDadosAutenticacao = (token, idJogador, tipoUsuario) => {
-  localStorage.setItem('token', token);
-  localStorage.setItem('id_jogador', idJogador);
+  sessionStorage.setItem('token', token);
+  sessionStorage.setItem('id_jogador', idJogador);
   if (tipoUsuario) {
-    localStorage.setItem('tipoUsuario', tipoUsuario);
+    sessionStorage.setItem('tipoUsuario', tipoUsuario);
   }
 };
 
 export const obterToken = () => {
-  return localStorage.getItem('token');
+  return sessionStorage.getItem('token');
 };
 
 export const obterJogadorId = () => {
-  return localStorage.getItem('id_jogador');
+  return sessionStorage.getItem('id_jogador');
 };
 
 export const obterTipoUsuario = () => {
-  return localStorage.getItem('tipoUsuario');
+  return sessionStorage.getItem('tipoUsuario');
 };
 
 export const removerDadosAutenticacao = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('id_jogador');
-  localStorage.removeItem('tipoUsuario');
+  sessionStorage.removeItem('token');
+  sessionStorage.removeItem('id_jogador');
+  sessionStorage.removeItem('tipoUsuario');
 };
 
 // Função para verificar autenticação

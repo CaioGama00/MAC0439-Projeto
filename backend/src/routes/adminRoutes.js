@@ -24,7 +24,7 @@ router.get('/db/tables', async (req, res, next) => {
 router.get('/db/tables/:tableName', async (req, res, next) => {
     const { tableName } = req.params;
     try {
-        // Validação básica do nome da tabela para prevenir SQL injection simples
+        // Validação básica do nome da tabela para prevenir SQL injection
         if (!/^[a-zA-Z0-9_]+$/.test(tableName)) {
             return res.status(400).json({ message: 'Nome de tabela inválido.' });
         }

@@ -7,12 +7,9 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo">
-        <Link to="/">Adedonha Online</Link>
+        <Link to="/lobby">Adedonha Online</Link>
       </div>
-      <nav className="nav">
-        <Link to="/lobby">Lobby</Link>
-        <Link to="/perfil">Perfil</Link>
-      </nav>
+
     </header>
   );
 };

@@ -159,7 +159,51 @@ const AdminDBPage = () => {
         <button onClick={handleExecuteQuery} disabled={loadingQuery}>{loadingQuery ? 'Executando...' : 'Executar Query'}</button>
         {loadingQuery && <p>Executando...</p>}
         {queryResult && (
-          <div className="query-result-viewer"><h3>Resultado da Query:</h3><pre>{JSON.stringify(queryResult, null, 2)}</pre></div>
+           <div className="query-result-viewer">
+            <h3>Resultado da Query:</h3>
+            {queryResult.error ? (
+              <p className="error-message">Erro: {queryResult.error}</p>
+            ) : (
+              <>
+                {queryResult.metadata && queryResult.metadata.command === 'SELECT' && (
+                  <>
+                    {queryResult.results && queryResult.results.length > 0 ? (
+                      <table>
+                        <thead>
+                          <tr>
+                            {Object.keys(queryResult.results[0]).map((key) => (
+                              <th key={key}>{key}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {queryResult.results.map((row, index) => (
+                            <tr key={index}>
+                              {Object.values(row).map((value, i) => (
+                                <td key={i}>{typeof value === 'boolean' ? String(value) : value}</td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <p>Nenhum resultado encontrado para a query SELECT.</p>
+                    )}
+                  </>
+                )}
+
+                {queryResult.metadata && queryResult.metadata.command !== 'SELECT' && (
+                  <p>
+                    Comando `{queryResult.metadata.command}` executado. {
+                      queryResult.metadata.rowCount !== undefined ?
+                      `${queryResult.metadata.rowCount} linhas afetadas.` :
+                      `Resultado: ${JSON.stringify(queryResult.results)}`
+                    }
+                  </p>
+                )}
+              </>
+            )}
+          </div>
         )}
       </section>
     </div>
