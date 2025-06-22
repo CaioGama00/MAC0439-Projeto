@@ -47,6 +47,7 @@ const autenticarJogador = async (username, senha) => {
     }
 
     const senhaValida = await comparePassword(senha, jogadorEncontrado.senha);
+    console.log(jogadorEncontrado.senha);
     if (!senhaValida) {
       throw new Error('Senha incorreta.');
     }
