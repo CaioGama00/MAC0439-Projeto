@@ -15,4 +15,16 @@ router.post('/:partidaId/iniciar-rodada', partidaController.iniciarRodada);
 // Rota para enviar uma resposta em uma rodada
 router.post('/:partidaId/rodada/:rodadaId/enviar-resposta', partidaController.enviarResposta);
 
+// Rota para enviar uma resposta em uma rodada
+router.get('/:partidaId/jogadores', partidaController.buscarJogadoresDaPartida);
+
+// Rota para buscar partida por ID
+router.get('/:partidaId', partidaController.buscarPartidaPorId);
+
+// Rota para verificar a rodada
+router.get('/:partidaId/verificar-rodada', partidaController.verificarRodada);
+
+// Rota para entrar na Partida
+router.post('/:partidaId/entrar', partidaController.entrarNaPartida);
+
 module.exports = router;
