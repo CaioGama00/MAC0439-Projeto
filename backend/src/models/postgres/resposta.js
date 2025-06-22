@@ -61,7 +61,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false, // Ajustado para NOT NULL
       defaultValue: true, // Mantido o default, mas allowNull: false tem precedência
     },
-    // pontuacao: { type: DataTypes.INTEGER, allowNull: false } // Adicionar se existir no schema
+    pontuacao: { 
+      type: DataTypes.INTEGER, 
+      allowNull: false 
+    } // Adicionar se existir no schema
   }, {
     sequelize,
     modelName: 'Resposta',
