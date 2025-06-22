@@ -56,14 +56,16 @@ const iniciarRodada = async (req, res) => {
 // Enviar uma resposta para uma rodada
 const enviarResposta = async (req, res) => {
   const { partidaId, rodadaId } = req.params;
-  const { idTema, resposta, idJogador } = req.body;
+  const { id_tema, resposta, id_jogador } = req.body;
+
+  console.log('Recebido do front:', req.body);
 
   try {
     const respostaSalva = await partidaService.enviarResposta(
       partidaId, 
       rodadaId, 
-      idJogador, 
-      idTema, 
+      id_jogador, 
+      id_tema, 
       resposta
     );
     
@@ -79,9 +81,91 @@ const enviarResposta = async (req, res) => {
   }
 };
 
+const buscarJogadoresDaPartida = async (req, res) => {
+  const { partidaId } = req.params;
+
+  try {
+    const jogadores = await partidaService.buscarJogadoresDaPartida(partidaId);
+
+    res.status(200).json({
+      success: true,
+      data: jogadores
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+const buscarPartidaPorId = async (req, res) => {
+  const { partidaId } = req.params;
+
+  try {
+    const temas = await partidaService.buscarTemasDaPartida(partidaId);
+
+    res.status(200).json({
+      success: true,
+      data: temas
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+const verificarRodada = async (req, res) => {
+  const { partidaId } = req.params;
+
+  try {
+    const rodada = await partidaService.buscarRodadaAtual(partidaId);
+
+    if (!rodada) {
+      return res.status(200).json({ rodadaIniciada: false });
+    }
+
+    return res.status(200).json({
+      rodadaIniciada: true,
+      dadosRodada: rodada
+    });
+  } catch (error) {
+    console.error("Erro interno ao verificar rodada:", error);
+    return res.status(500).json({ error: "Erro ao verificar rodada" });
+  }
+};
+
+const entrarNaPartida = async (req, res) => {
+  const { partidaId } = req.params;
+  const { idJogador } = req.body;
+
+  try {
+    const resultado = await partidaService.entrarOuVerificarJogadorNaPartida(partidaId, idJogador);
+    console.log(resultado)
+
+    res.status(200).json({
+      success: true,
+      message: resultado.entrouAgora
+        ? 'Jogador entrou na partida'
+        : 'Jogador já estava na partida',
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   criarPartida,
   buscarPartidasAtivas,
   iniciarRodada,
-  enviarResposta
+  enviarResposta,
+  buscarJogadoresDaPartida,
+  verificarRodada,
+  buscarPartidaPorId,
+  entrarNaPartida
 };
