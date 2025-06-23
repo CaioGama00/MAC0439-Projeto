@@ -16,10 +16,6 @@ const Navbar = () => {
   return (
     <nav style={{ background: '#333', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <div>
-        <Link to="/lobby" style={{ color: 'white', marginRight: '15px', textDecoration: 'none' }}>Lobby</Link>
-        {autenticado && (
-          <Link to="/perfil" style={{ color: 'white', marginRight: '15px', textDecoration: 'none' }}>Perfil</Link>
-        )}
         {/* Link condicional para a página de Admin */}
         {autenticado && tipoUsuario === 'Admin' && (
           <Link to="/admin/db" style={{ color: 'white', marginRight: '15px', textDecoration: 'none', fontWeight: 'bold' }}>
@@ -33,7 +29,7 @@ const Navbar = () => {
             Logout
           </button>
         ) : (
-          <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Login</Link>
+          <Link to="/" style={{ color: 'white', textDecoration: 'none' }}></Link>
         )}
       </div>
     </nav>

@@ -1,5 +1,5 @@
 -- Criar o banco de dados
-
+CREATE DATABASE adedonha;
 
 -- Conectar ao banco de dados
 \c adedonha
@@ -49,7 +49,7 @@ CREATE TABLE Partida (
   id_partida SERIAL PRIMARY KEY,
   id_criador INTEGER NOT NULL,
   id_ganhador INTEGER,
-  estado VARCHAR(20) NOT NULL CHECK (estado IN ('ativa', 'finalizada')),
+  estado VARCHAR(20) NOT NULL CHECK (estado IN ('iniciada', 'finalizada')),
   data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (id_criador) REFERENCES Jogador (id_jogador),
   FOREIGN KEY (id_ganhador) REFERENCES Jogador (id_jogador)
