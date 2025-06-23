@@ -50,7 +50,7 @@ const buscarHistoricoPartidas = async (req, res) => {
 // }
 const atualizarMongo = async (req, res) => {
   try {
-      // ✅ 1. Query PostgreSQL data
+      // 1. Query PostgreSQL data
       const rows = await sequelize.query(`
         SELECT p.id_partida, p.data_criacao, 
               h.id_jogador AS host_id, h.username AS host_username,
@@ -62,7 +62,7 @@ const atualizarMongo = async (req, res) => {
       `, { type: sequelize.QueryTypes.SELECT });
 
       for (const partida of rows) {
-        // ✅ 2. Get jogadores, temas, letras, etc.
+        // 2. Get jogadores, temas, letras, etc.
         const jogadores = await sequelize.query(`
           SELECT j.id_jogador, j.username, pj.pontuacao_final, r.numero_rodada, 
           r.resposta, r.valida, rod.letra_sorteada, t.nome as tema_nome
@@ -86,7 +86,7 @@ const atualizarMongo = async (req, res) => {
           ORDER BY numero_rodada
         `, { type: sequelize.QueryTypes.SELECT });
 
-        // ✅ 3. Transform into Mongo format
+        // 3. Transform into Mongo format
         const jogadoresTransformados = jogadores.reduce((acc, row) => {
           let jogador = acc.find(j => j.id_jogador === row.id_jogador);
           if (!jogador) {
@@ -119,7 +119,7 @@ const atualizarMongo = async (req, res) => {
           return acc;
         }, []);
 
-        // ✅ 4. Inserir no Mongo
+        // 4. Inserir no Mongo
         await HistoricoPartida.create({
           id_partida: partida.id_partida,
           host: {
@@ -136,10 +136,9 @@ const atualizarMongo = async (req, res) => {
           jogadores: jogadoresTransformados
         });
 
-        console.log(`✅ Partida ${partida.id_partida} migrada com sucesso`);
+        console.log(`Partida ${partida.id_partida} migrada com sucesso`);
       }
 
-      // ✅ Done
     } catch (err) {
       console.error('Erro durante migração:', err);
     }

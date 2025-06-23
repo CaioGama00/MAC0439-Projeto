@@ -49,7 +49,7 @@ CREATE TABLE Partida (
   id_partida SERIAL PRIMARY KEY,
   id_criador INTEGER NOT NULL,
   id_ganhador INTEGER,
-  estado VARCHAR(20) NOT NULL CHECK (estado IN ('criada', 'ativa', 'finalizada')),
+  estado VARCHAR(20) NOT NULL CHECK (estado IN ('ativa', 'finalizada')),
   data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (id_criador) REFERENCES Jogador (id_jogador),
   FOREIGN KEY (id_ganhador) REFERENCES Jogador (id_jogador)
@@ -154,9 +154,9 @@ INSERT INTO Partida (id_criador, estado, id_ganhador)
 VALUES 
   (1, 'finalizada', 2), 
   (2, 'finalizada', 2), 
-  (3, 'ativa', NULL),    
+  (3, 'iniciada', NULL),    
   (4, 'finalizada', 1), 
-  (1, 'ativa', NULL);
+  (1, 'iniciada', NULL);
 
 -- Temas nas partidas
 INSERT INTO TemaPartida (id_partida, id_tema)

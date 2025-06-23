@@ -8,6 +8,7 @@ import PartidaPage from './pages/partidaPage';
 import Perfil from './pages/perfil';
 import Cadastro from './pages/cadastro'; 
 import AdminDBPage from './pages/AdminDBPage';
+import IniciarRodadaPage from './pages/iniciarRodada';
 import HistoricoPartidasPage from './pages/historicoPartidas'; // Importar página de histórico
 import Navbar from './components/navbar';
 import './styles/global.css'; // Importa os estilos globais
@@ -44,7 +45,7 @@ function App() {
           <Route path="/historico" element={<HistoricoPartidasPage />} /> 
 
           {/* Página de Lobby (listagem de partidas) */}
-          <Route path="/lobby/criarpartida" element={<CriarPartida />} />
+          {/*<Route path="/lobby/criarpartida" element={<CriarPartida />} />*/}
 
           {/* Página da Partida */}
           <Route path="/partida/:partidaId" element={<PartidaPage />} />
