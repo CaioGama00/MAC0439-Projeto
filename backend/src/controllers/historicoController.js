@@ -31,24 +31,10 @@ const buscarHistoricoPartidas = async (req, res) => {
   }
 };
 
-// const atualizarMongo = async (req, res) => {
-//   const sql = `
-//       SELECT p.*, 
-//             h.username AS host_username, 
-//             g.username AS ganhador_username
-//       FROM partida p
-//       JOIN jogador h ON h.id_jogador = p.id_criador
-//       JOIN jogador g ON g.id_jogador = p.id_ganhador`;  
-
-//   const [results] = await sequelize.query(sql, {
-//     type: sequelize.QueryTypes.SELECT,
-//   });
-
-//   for (const partida of results) {
-
-//   }
-// }
 const atualizarMongo = async (req, res) => {
+
+  const { id_partida } = req.params;
+
   try {
       // 1. Query PostgreSQL data
       const rows = await sequelize.query(`
@@ -58,7 +44,7 @@ const atualizarMongo = async (req, res) => {
         FROM partida p
         JOIN jogador h ON h.id_jogador = p.id_criador
         JOIN jogador g ON g.id_jogador = p.id_ganhador
-        WHERE p.estado = 'finalizada'
+        WHERE p.id_partida = '${id_partida}' 
       `, { type: sequelize.QueryTypes.SELECT });
 
       for (const partida of rows) {
@@ -136,11 +122,13 @@ const atualizarMongo = async (req, res) => {
           jogadores: jogadoresTransformados
         });
 
-        console.log(`Partida ${partida.id_partida} migrada com sucesso`);
+        console.log(`✅ Partida ${partida.id_partida} migrada com sucesso`);
+        res.status(200).json({ success: true, message: 'Migração concluída.' });
       }
 
     } catch (err) {
       console.error('Erro durante migração:', err);
+      res.status(500).json({ success: false, message: 'Erro durante migração.' });
     }
 };
 
