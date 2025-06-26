@@ -31,24 +31,16 @@ const buscarHistoricoPartidas = async (req, res) => {
   }
 };
 
-// const atualizarMongo = async (req, res) => {
-//   const sql = `
-//       SELECT p.*, 
-//             h.username AS host_username, 
-//             g.username AS ganhador_username
-//       FROM partida p
-//       JOIN jogador h ON h.id_jogador = p.id_criador
-//       JOIN jogador g ON g.id_jogador = p.id_ganhador`;  
-
-//   const [results] = await sequelize.query(sql, {
-//     type: sequelize.QueryTypes.SELECT,
-//   });
-
-//   for (const partida of results) {
-
-//   }
-// }
 const atualizarMongo = async (req, res) => {
+
+  const { id_partida } = req.params;
+
+  const jaExiste = await HistoricoPartida.findOne({ id_partida: id_partida.toString() });
+  
+  if (jaExiste) {
+    return res.status(404).json({ success: false, message: 'Partida já inserida no mongo.' });
+  }
+
   try {
       // 1. Query PostgreSQL data
       const rows = await sequelize.query(`
@@ -58,8 +50,12 @@ const atualizarMongo = async (req, res) => {
         FROM partida p
         JOIN jogador h ON h.id_jogador = p.id_criador
         JOIN jogador g ON g.id_jogador = p.id_ganhador
-        WHERE p.estado = 'finalizada'
+        WHERE p.id_partida = '${id_partida}'        
       `, { type: sequelize.QueryTypes.SELECT });
+
+      if (!rows.length) {
+        return res.status(404).json({ success: false, message: 'Partida não encontrada ou já inserida no mongo.' });
+      }
 
       for (const partida of rows) {
         // 2. Get jogadores, temas, letras, etc.
@@ -71,7 +67,7 @@ const atualizarMongo = async (req, res) => {
           JOIN resposta r ON r.id_jogador = j.id_jogador AND r.id_partida = pj.id_partida
           JOIN rodada rod ON r.id_partida = rod.id_partida AND r.numero_rodada = rod.numero_rodada
           JOIN tema t ON r.id_tema = t.id_tema
-          WHERE pj.id_partida = '${partida.id_partida}'
+          WHERE pj.id_partida = '${partida.id_partida}'           
           ORDER BY j.id_jogador, r.numero_rodada
         `, { type: sequelize.QueryTypes.SELECT });
 
@@ -136,11 +132,13 @@ const atualizarMongo = async (req, res) => {
           jogadores: jogadoresTransformados
         });
 
-        console.log(`Partida ${partida.id_partida} migrada com sucesso`);
+        console.log(`✅ Partida ${partida.id_partida} migrada com sucesso`);
+        res.status(200).json({ success: true, message: 'Migração concluída.' });
       }
 
     } catch (err) {
       console.error('Erro durante migração:', err);
+      res.status(500).json({ success: false, message: 'Erro durante migração.' });
     }
 };
 

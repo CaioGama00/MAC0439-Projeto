@@ -1,8 +1,8 @@
 -- Criar o banco de dados
 CREATE DATABASE adedonha;
 
--- Conectar ao banco de dados
-\c adedonha
+-- Para rodar no banco de dados, use: 
+-- psql -U <username> -d <banco_de_dados> -f <caminho>/init_postgres.sql
 
 -- Criar as tabelas
 
