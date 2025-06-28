@@ -33,6 +33,7 @@ const modelDefiners = [
   require('../models/postgres/item'),
   require('../models/postgres/inventario'),
   require('../models/postgres/amizade'),
+  require('../models/postgres/jogadoresNaPartida')
   // Adicione require para outros modelos aqui
 ];
 
