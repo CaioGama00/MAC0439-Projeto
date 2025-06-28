@@ -1,10 +1,8 @@
-'use strict';
-const { Model } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 
 
 class JogadoresNaPartida extends Model {
     static associate(models) {
-        // Associação explícita opcional
     }
 }
 
@@ -45,6 +43,5 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'jogadoresnapartida',
     timestamps: false
   });
-
   return JogadoresNaPartida;
 };
