@@ -140,6 +140,7 @@ const verificarRodada = async (req, res) => {
 const entrarNaPartida = async (req, res) => {
   const { partidaId } = req.params;
   const { idJogador } = req.body;
+  console.log(`${partidaId} e ${idJogador}`)
 
   try {
     const resultado = await partidaService.entrarOuVerificarJogadorNaPartida(partidaId, idJogador);
