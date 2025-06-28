@@ -116,6 +116,7 @@ VALUES
   ('Rafael Costa', 'rafaelcosta', 'rafael@usp.br', 'hashghi', 'Gratuito'),
   ('Juliana Martins', 'jumartins','juliana@usp.br', 'hashjkl', 'Premium'),
   ('André Souza', 'andresouza', 'andre@usp.br', 'hashmno', 'Gratuito');
+  ('Admin User', 'admin', 'admin1@com', '$2b$10$odHPQnE/oggetOHQzNNV6udTz0G/XlQ2KSvbqpOFub06L8EyxPBfG', 'Admin');
 
 -- Itens
 INSERT INTO Item (nome, descricao, preco, exclusivo_assinante)
