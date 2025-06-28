@@ -1,4 +1,3 @@
-// src/pages/JogadoresDaPartida.jsx
 import React, { useEffect, useState } from 'react';
 
 const PlayerList = ({ players }) => (
@@ -28,14 +27,13 @@ const JogadoresDaPartida = ({ idPartida }) => {
   useEffect(() => {
     async function fetchPlayers() {
       try {
-        const res = await fetch(`http://localhost:8000/api/partida/1/jogadores`);
+        const res = await fetch(`http://localhost:8000/api/partida/${idPartida}/jogadores`);
         const data = await res.json();
         if (data.success) {
-          // Mapeia os dados para o formato esperado pelo PlayerList
           const formattedPlayers = data.data.map((p, idx) => ({
             username: p.username,
-            points: 0,           // você pode ajustar se tiver pontuação real
-            isCurrent: idx === 0 // só como exemplo: o primeiro é o jogador atual
+            points: 0,           
+            isCurrent: idx === 0 
           }));
           setPlayers(formattedPlayers);
         } else {
