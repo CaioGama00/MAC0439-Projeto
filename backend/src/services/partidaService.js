@@ -206,11 +206,11 @@ const buscarRodadaAtual = async (partidaId) => {
   });
 };
 
-const entrarOuVerificarJogadorNaPartida = async (id_partida, id_jogador) => {
-  console.log(`${id_partida} e ${id_jodagor}`)
+const entrarOuVerificarJogadorNaPartida = async (partidaId, idJogador) => {
+  console.log('JogadoresNaPartida:', JogadoresNaPartida);
 
   const jogador = await JogadoresNaPartida.findOne({
-    where: { id_partida, id_jogador }
+    where: { id_partida: partidaId, id_jogador: idJogador }
   });
 
   console.log(jogador)
@@ -218,8 +218,8 @@ const entrarOuVerificarJogadorNaPartida = async (id_partida, id_jogador) => {
   if (!jogador) {
     // Cria a entrada
     await JogadoresNaPartida.create({
-      id_partida,
-      id_jogador,
+      id_partida: partidaId,
+      id_jogador: idJogador,
       pontuacao_final: 0
     });
     return { entrouAgora: true };
