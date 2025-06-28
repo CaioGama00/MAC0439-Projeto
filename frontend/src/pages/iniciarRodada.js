@@ -2,55 +2,65 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { entrarPartida, onNovaLetra } from '../services/socket';
+import { obterJogadorId } from '../utils/auth';
 
 const IniciarRodadaPage = () => {
-  const { partidaId } = useParams(); // recebe da URL
+  const { partidaId } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [letra, setLetra] = useState(null);
+  const idJogador = obterJogadorId()
 
   useEffect(() => {
-    // escuta a letra sorteada do socket
     onNovaLetra((novaLetra) => {
       console.log("Letra recebida via socket:", novaLetra);
       setLetra(novaLetra);
     });
 
     return () => {
-      // limpa listener se sair da página
       onNovaLetra(null);
     };
   }, []);
 
 
     const iniciarRodadaOuEntrar = async (partidaId, navigate) => {
-        let idJogador = 1
         try {
-            const res = await axios.get(`http://localhost:8000/api/partida/${partidaId}/verificar-rodada`);
-            const response = await axios.post(`http://localhost:8000/api/partida/${partidaId}/entrar`, {
-                idJogador
+          const res = await axios.get(`http://localhost:8000/api/partida/${partidaId}/verificar-rodada`);
+          const response = await axios.post(`http://localhost:8000/api/partida/${partidaId}/entrar`, {
+            idJogador
+          });
+
+          console.log('Resposta da rodada:', res.data);
+
+          if (res.data.rodadaIniciada && res.data.dadosRodada.estado === 'em_andamento') {
+            const rodadaId = res.data.dadosRodada.numero_rodada;
+            const letra = res.data.dadosRodada.letra_sorteada;
+
+            await entrarOuRedirecionar(partidaId, idJogador);
+            navigate(`/partida/${partidaId}`, {
+              state: { rodadaId, letra }
             });
 
-            console.log(response)
+          } else {
+            console.log('Nenhuma rodada em andamento ou rodada finalizada. Iniciando nova rodada...');
+            
+            await axios.post(`http://localhost:8000/api/partida/${partidaId}/iniciar-rodada`);
 
-            if (res.data.rodadaIniciada) {
-                console.log('Rodada já iniciada, redirecionando...');
-                console.log(res.data.dadosRodada.letra_sorteada)
-                setLetra(res.data.dadosRodada.letra_sorteada)
-                entrarOuRedirecionar(partidaId, 1)
-                navigate(`/partida/${partidaId}`);
-            } else {
-                console.log('Iniciando nova rodada...');
-                await axios.post(`http://localhost:8000/api/partida/${partidaId}/iniciar-rodada`);
-                entrarOuRedirecionar(partidaId, 1)
-                navigate(`/partida/${partidaId}`);
-            }
+            const novaRodadaRes = await axios.get(`http://localhost:8000/api/partida/${partidaId}/verificar-rodada`);
+            const rodadaId = novaRodadaRes.data.dadosRodada.numero_rodada;
+            const letra = novaRodadaRes.data.dadosRodada.letra_sorteada;
+
+            await entrarOuRedirecionar(partidaId, idJogador);
+            navigate(`/partida/${partidaId}`, {
+              state: { rodadaId, letra }
+            });
+          }
         } catch (err) {
-            console.error('Erro ao verificar ou iniciar rodada:', err);
+          console.error('Erro ao verificar ou iniciar rodada:', err);
         }
     };
 
-    const entrarOuRedirecionar = async (partidaId, idJogador) => {
+    const entrarOuRedirecionar = async (partidaId, idJogador) => { 
         try {
             const response = await axios.post(`http://localhost:8000/api/partida/${partidaId}/entrar`, {
                 idJogador
@@ -66,7 +76,6 @@ const IniciarRodadaPage = () => {
         }
     };
 
-  // quando a letra estiver pronta, redireciona
   useEffect(() => {
     if (letra) {
       navigate(`/partida/${partidaId}`, { state: { letra } });
@@ -79,7 +88,7 @@ const IniciarRodadaPage = () => {
       {loading ? (
         <p>Carregando rodada...</p>
       ) : (
-        <button onClick={() => iniciarRodadaOuEntrar(partidaId, navigate)} style={{ padding: 12, fontSize: 18, weight: "200px" }}>
+        <button onClick={() => iniciarRodadaOuEntrar(partidaId, navigate)} style={{ padding: 12, fontSize: 18, width: "200px" }}>
           🚀 Iniciar rodada
         </button>
       )}
