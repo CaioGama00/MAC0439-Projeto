@@ -144,6 +144,9 @@ Para rodá-los, execute os seguintes comandos para cada banco:
 ```bash
 psql -U <POSTGRES_USER> -d <POSTGRES_DB> -f ./backend/src/scripts/init_postgres.sql
 ```
+#### Usuário 
+
+Você poderá logar como administrador, após executar o script de inicialização, usando o usuário: 'admin' e a senha: 'admin123' 
 
 ### MongoDB
 
