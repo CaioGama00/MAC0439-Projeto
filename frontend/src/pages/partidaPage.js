@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import {
   entrarPartida,
   onNovaLetra,
@@ -12,6 +12,7 @@ import TimerBar from '../components/timerbar';
 import { enviarResposta } from '../services/api';
 import './partidaPage.css';
 import axios from 'axios';
+import { obterJogadorId } from '../utils/auth';
 
 // ======================== COMPONENTES AUXILIARES ========================
 
@@ -131,8 +132,12 @@ const Chat = ({ messages, onSend }) => {
 
 const PartidaPage = () => {
   const { partidaId } = useParams();
+  const idJogador = obterJogadorId();
   const location = useLocation();
+  const navigate = useNavigate();
   const letraRecebida = location.state?.letra || '';
+  const rodadaId = location.state?.rodadaId || 1;
+  console.log(rodadaId)
 
   const [letra, setLetra] = useState(letraRecebida);
   const [fieldsData, setFieldsData] = useState({});
@@ -184,9 +189,6 @@ const PartidaPage = () => {
   };
 
   const handleStopClick = async () => {
-    const idJogador = 1;
-    const rodadaId = 1;
-
     const respostas = fields.map(field => ({
       idTema: field.id,
       resposta: fieldsData[field.name] || ''
@@ -199,6 +201,7 @@ const PartidaPage = () => {
 
       emitirJogadorStop(partidaId, idJogador, respostas);
       alert('Você apertou STOP!');
+      navigate(`/partida/iniciar/${partidaId}`);
     } catch (err) {
       console.error('Erro ao enviar respostas:', err);
     }
@@ -225,7 +228,7 @@ const PartidaPage = () => {
 
       <div style={{ flexGrow: 1, height: '85vh', marginBottom: 1 }}>
         <TimerBar percent={timerPercent} />
-        <LetterAndRounds round={round} totalRounds={8} letter={letra} />
+        <LetterAndRounds round={rodadaId} totalRounds={8} letter={letra} />
         <h3 style={{ textAlign: 'center', marginBottom: 5 }}>PREENCHA OS CAMPOS</h3>
         <FieldsForm
           fields={fields}
